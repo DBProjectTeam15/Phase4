@@ -61,7 +61,7 @@ public class ConsoleApplication {
         pageControllers.put(ManagerPageKey.ARTIST_MANAGEMENT, new ArtistManageController(managerAuthService, managerSessionWrapper, artistDAO));
         pageControllers.put(ManagerPageKey.MANAGER_MAIN, new ManagerMainController(managerSessionWrapper, managerAuthService));
         pageControllers.put(ManagerPageKey.PROVIDER_MANAGEMENT, new ProviderManageController(managerSessionWrapper, providerDAO));
-        pageControllers.put(ManagerPageKey.SONG_MANAGEMENT, new SongManageController(managerSessionWrapper));
+        pageControllers.put(ManagerPageKey.SONG_MANAGEMENT, new SongManageController(managerSessionWrapper, songDAO));
         pageControllers.put(ManagerPageKey.REQUEST_MANAGEMENT, new SongRequestManageController(managerSessionWrapper, songRequestDAO));
         pageControllers.put(ManagerPageKey.ARTIST_DETAILS, null);
         pageControllers.put(ManagerPageKey.EXIT, null);
@@ -73,8 +73,6 @@ public class ConsoleApplication {
         while (managerPageKey != ManagerPageKey.EXIT) {
             PageController<ManagerPageKey> pageController = pageControllers.get(managerPageKey);
 
-
-            System.out.println(managerPageKey.getDisplayTitle());
             try {
                 pageController.displayScreen();
             } catch (InvalidLoginStateException e) {
