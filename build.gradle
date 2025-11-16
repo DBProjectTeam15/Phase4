@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+    id 'application'
 }
 
 group = 'knu.database.musebase'
@@ -40,4 +42,8 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+application {
+    mainClass = 'knu.database.musebase.MuseBaseApplication'
 }
