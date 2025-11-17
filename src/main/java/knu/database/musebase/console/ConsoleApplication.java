@@ -1,20 +1,21 @@
 package knu.database.musebase.console;
 
+import knu.database.musebase.service.auth.AuthService;
+import knu.database.musebase.auth.SessionWrapper;
 import knu.database.musebase.crypto.PasswordEncryptor;
 import knu.database.musebase.crypto.PasswordEncryptorImpl;
 import knu.database.musebase.dao.ArtistDAO;
 import knu.database.musebase.dao.ProviderDAO;
 import knu.database.musebase.dao.SongDAO;
-import knu.database.musebase.domain.manager.console.ManagerPageKey;
-import knu.database.musebase.domain.manager.auth.ManagerAuthService;
-import knu.database.musebase.domain.manager.auth.ManagerSessionWrapper;
-import knu.database.musebase.domain.manager.controller.ArtistManageController;
-import knu.database.musebase.domain.manager.controller.ManagerMainController;
-import knu.database.musebase.domain.manager.controller.ProviderManageController;
-import knu.database.musebase.domain.manager.controller.SongManageController;
-import knu.database.musebase.domain.manager.controller.SongRequestManageController;
-import knu.database.musebase.domain.manager.dao.ManagerDAO;
-import knu.database.musebase.domain.manager.dao.SongRequestDAO;
+import knu.database.musebase.service.auth.ManagerAuthService;
+import knu.database.musebase.auth.manager.ManagerSessionWrapper;
+import knu.database.musebase.controller.manager.ArtistManageController;
+import knu.database.musebase.controller.manager.ManagerMainController;
+import knu.database.musebase.controller.manager.ProviderManageController;
+import knu.database.musebase.controller.manager.SongManageController;
+import knu.database.musebase.controller.manager.SongRequestManageController;
+import knu.database.musebase.dao.manager.ManagerDAO;
+import knu.database.musebase.dao.manager.SongRequestDAO;
 import knu.database.musebase.exception.InvalidLoginStateException;
 
 import java.util.HashMap;

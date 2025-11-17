@@ -1,7 +1,7 @@
-package knu.database.musebase.domain.manager.dao;
+package knu.database.musebase.dao.manager;
 
 import knu.database.musebase.dao.BasicDataAccessObjectImpl;
-import knu.database.musebase.domain.manager.data.SongRequest;
+import knu.database.musebase.data.SongRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

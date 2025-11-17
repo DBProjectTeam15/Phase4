@@ -1,4 +1,4 @@
-package knu.database.musebase.domain.manager.console;
+package knu.database.musebase.console;
 
 public enum ManagerPageKey {
     MANAGER_MAIN,

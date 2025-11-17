@@ -1,9 +1,9 @@
-package knu.database.musebase.domain.manager.controller;
+package knu.database.musebase.controller.manager;
 
 import knu.database.musebase.console.PageController;
-import knu.database.musebase.domain.manager.console.ManagerPageKey;
-import knu.database.musebase.domain.manager.auth.ManagerAuthService;
-import knu.database.musebase.domain.manager.auth.ManagerSessionWrapper;
+import knu.database.musebase.console.ManagerPageKey;
+import knu.database.musebase.service.auth.ManagerAuthService;
+import knu.database.musebase.auth.manager.ManagerSessionWrapper;
 import knu.database.musebase.exception.InvalidLoginStateException;
 import lombok.RequiredArgsConstructor;
 

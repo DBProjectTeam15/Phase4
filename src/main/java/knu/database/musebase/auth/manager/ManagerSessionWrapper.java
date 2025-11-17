@@ -1,4 +1,4 @@
-package knu.database.musebase.domain.manager.auth;
+package knu.database.musebase.auth.manager;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
