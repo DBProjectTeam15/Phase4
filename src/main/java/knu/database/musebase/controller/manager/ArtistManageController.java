@@ -23,8 +23,15 @@ public class ArtistManageController implements PageController<ManagerPageKey> {
         }
 
         System.out.println("\n--- 아티스트 관리 ---");
+
+
         System.out.println("관리자 ID: " + managerSessionWrapper.getManagerSession().getLoggedInNickname());
-        System.out.println("1. 아티스트 정보 확인 [아티스트 ID]");
+
+        for (Artist artist : artistDAO.findAll()) {
+            System.out.println(artist.getId() + ":" + artist.getName() + ":" + artist.getGender());
+        }
+
+        System.out.println("\n1. 아티스트 정보 확인 [아티스트 ID]");
         System.out.println("2. 아티스트 추가 [이름] [성별]");
         System.out.println("3. 아티스트 삭제 [아티스트 ID]");
         System.out.println("0. 돌아가기");
@@ -60,7 +67,6 @@ public class ArtistManageController implements PageController<ManagerPageKey> {
                 }
                 else {
                     System.out.println("아티스트 정보 저장에 성공했습니다.");
-                    System.out.println(artist.getId() + ":" + artist.getName() + ":" + artist.getGender());
                 }
 
                 yield ManagerPageKey.ARTIST_MANAGEMENT;

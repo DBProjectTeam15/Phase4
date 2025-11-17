@@ -74,7 +74,6 @@ public class ConsoleApplication {
         pageControllers.put(ManagerPageKey.PROVIDER_MANAGEMENT, new ProviderManageController(managerSessionWrapper, providerDAO));
         pageControllers.put(ManagerPageKey.SONG_MANAGEMENT, new SongManageController(managerSessionWrapper, songDAO));
         pageControllers.put(ManagerPageKey.REQUEST_MANAGEMENT, new SongRequestManageController(managerSessionWrapper, songRequestDAO));
-        pageControllers.put(ManagerPageKey.ARTIST_DETAILS, null);
         pageControllers.put(ManagerPageKey.EXIT, null);
 
         Scanner scanner = new Scanner(System.in);
