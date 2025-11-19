@@ -17,7 +17,7 @@ public class MainController implements PageController<PageKey> {
 
     @Override
     public void displayScreen() throws InvalidLoginStateException {
-        System.out.println("-- Musebase --");
+        System.out.println("-- Musicbase --");
 
         if (sessionWrapper.validateLogin()) {
             System.out.println("1. 로그아웃");

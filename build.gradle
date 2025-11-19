@@ -45,5 +45,5 @@ test {
 }
 
 application {
-    mainClass = 'knu.database.musebase.MusicBaseApplication'
+    mainClass = 'knu.database.musicbase.MusicBaseApplication'
 }
