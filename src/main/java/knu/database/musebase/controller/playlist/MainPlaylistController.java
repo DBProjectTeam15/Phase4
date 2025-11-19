@@ -1,8 +1,12 @@
 package knu.database.musebase.controller.playlist;
 
-import knu.database.musebase.auth.SessionWrapper;
 import knu.database.musebase.console.PageKey;
+import knu.database.musebase.data.Playlist;
+import knu.database.musebase.exception.InvalidLoginStateException;
+import knu.database.musebase.service.PlaylistDetailService;
 import knu.database.musebase.service.PlaylistService;
+
+import java.util.List;
 
 
 /**
@@ -12,14 +16,56 @@ import knu.database.musebase.service.PlaylistService;
  */
 public class MainPlaylistController extends PlaylistController {
 
-    public MainPlaylistController(PlaylistService playlistService) {
+    private final PlaylistDetailService playlistDetailService;
+
+    public MainPlaylistController(PlaylistService playlistService, PlaylistDetailService playlistDetailService) {
         super(playlistService);
+        this.playlistDetailService = playlistDetailService;
+    }
+
+    @Override
+    public void displayScreen() throws InvalidLoginStateException {
+        // playlistService 에서 받아와야할 플레이리스트들을 출력합니다.
+        System.out.println("-- " + playlistService.getPlaylistName() + " --");
+        System.out.println("이곳에서 각각의 플레이리스트 인덱스 값을 명령어로 치면 자세한 정보를 보실 수 있습니다.");
+        System.out.println("* 1. ... -> 1 입력시 상세 페이지 확인 가능");
+
+        List<Playlist> playlists = playlistService.getPlaylists();
+
+        if (playlists.isEmpty()) {
+            System.out.println("  * 해당 플레이리스트가 없습니다.");
+        } else {
+
+            for (int i=0; i<playlists.size(); ++i) {
+                Playlist pl = playlists.get(i);
+                System.out.println((i + 1) + ". " + pl.getId() + " : " + pl.getTitle() + " : " + pl.getIsCollaborative());
+            }
+        }
+
+        System.out.println("\n0. 돌아가기");
     }
 
 
     @Override
     public PageKey invoke(String[] commands){
         if  (commands[0].equals("0")) return PageKey.MAIN;
-        else return PageKey.PLAYLIST_PAGE;
+
+        try {
+            long id = Long.parseLong(commands[0]);
+            if (id > 0 && id <= playlistService.getPlaylists().size()) {
+                Playlist playlist = playlistService.getPlaylists().get((int)id - 1);
+                long playlistId = playlist.getId();
+                String playlistName = playlist.getTitle();
+                playlistDetailService.updatePageStatus(PageKey.PLAYLIST_PAGE, playlistName);
+                playlistDetailService.getPlaylistDetails(playlistId);
+
+                return PageKey.PLAYLIST_DETAIL;
+            }
+        }
+        catch (NumberFormatException e) {
+            return PageKey.PLAYLIST_PAGE;
+        }
+
+        return PageKey.PLAYLIST_PAGE;
     }
 }

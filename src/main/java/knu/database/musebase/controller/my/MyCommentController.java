@@ -1,4 +1,4 @@
-package knu.database.musebase.controller;
+package knu.database.musebase.controller.my;
 
 import knu.database.musebase.console.PageController;
 import knu.database.musebase.console.PageKey;
@@ -17,7 +17,7 @@ public class MyCommentController implements PageController<PageKey> {
         System.out.println("-- " + commentService.getTitle() + " --");
         System.out.println("ID : 플레이리스트 ID : 내용 : 일시");
         for (Comment c : commentService.getComments()) {
-            System.out.println(c.getId() + " : " + c.getId().getPlaylistId() + " : " + c.getContent() + " : " + c.getCommentedAt());
+            System.out.println(c.getId().getId() + " : " + c.getId().getPlaylistId() + " : " + c.getContent() + " : " + c.getCommentedAt());
         }
 
         System.out.println("\n0. 돌아가기");

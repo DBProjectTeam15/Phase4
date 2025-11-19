@@ -122,6 +122,14 @@ public class ArtistDAO extends BasicDataAccessObjectImpl<Artist, Long> {
         }
     }
 
+    /**
+     * 집계 함수 사용 - 쿼리 3번 / 2번 유형 활용
+     * @param name
+     * @param nameExact
+     * @param gender
+     * @param roles
+     * @return
+     */
     public int countArtists(String name, boolean nameExact, String gender, List<String> roles) {
         List<Object> params = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT COUNT(DISTINCT a.Artist_id) AS total_count FROM ARTISTS a ");

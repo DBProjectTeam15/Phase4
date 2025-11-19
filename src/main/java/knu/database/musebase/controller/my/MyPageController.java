@@ -6,7 +6,6 @@ import knu.database.musebase.console.PageKey;
 import knu.database.musebase.console.PageController;
 import knu.database.musebase.crypto.PasswordEncryptor;
 import knu.database.musebase.dao.UserDAO;
-import knu.database.musebase.dao.manager.SongRequestDAO;
 import knu.database.musebase.data.User;
 import knu.database.musebase.exception.InvalidLoginStateException;
 import knu.database.musebase.service.CommentService;
@@ -19,6 +18,7 @@ import java.sql.SQLException;
 public class MyPageController implements PageController<PageKey> {
 
     private final SessionWrapper sessionWrapper;
+    private final AuthService authService;
     private final PlaylistService playlistService;
     private final CommentService commentService;
     private final PasswordEncryptor passwordEncryptor;
@@ -40,7 +40,7 @@ public class MyPageController implements PageController<PageKey> {
         System.out.println("\n1. 비밀번호 변경 [현재 비밀번호] [변경할 비밀번호]");
         System.out.println("2. 닉네임 변경 [변경할 닉네임]");
         System.out.println("3. 계정 삭제 [y]");
-        System.out.println("4. 공유 플레이리스트 보기");
+        System.out.println("4. 공유된 플레이리스트 (소유는 하지 않았지만 편집은 가능한) 보기");
         System.out.println("5. 편집 가능 플레이리스트 보기");
         System.out.println("6. 소유한 플레이리스트 보기");
         System.out.println("7. 내가 작성한 댓글 보기");
@@ -92,6 +92,7 @@ public class MyPageController implements PageController<PageKey> {
 
                 try {
                     userDAO.update(new User(user.getUserId(), commands[1], user.getPassword(), user.getEmail()));
+                    sessionWrapper.updateSession(authService.login(user.getEmail(), user.getPassword()));
                     System.out.println("닉네임이 변경되었습니다. : " + commands[1]);
                 }
                 catch (SQLException ex) {
@@ -110,7 +111,7 @@ public class MyPageController implements PageController<PageKey> {
             }
             case "4" -> {
                 if (!sessionWrapper.validateLogin()) yield PageKey.MY_PAGE;
-                playlistService.updateMySharedPlaylist(sessionWrapper.getSession().getLoggedInId());
+                playlistService.updateSharedPlaylists(sessionWrapper.getSession().getLoggedInId());
                 yield PageKey.MY_PAGE_PLAYLIST;
             }
             case "5" -> {

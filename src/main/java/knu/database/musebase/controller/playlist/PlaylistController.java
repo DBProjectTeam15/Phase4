@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public abstract class PlaylistController implements PageController<PageKey> {
 
-    private final PlaylistService playlistService;
+    protected final PlaylistService playlistService;
 
 
     @Override
@@ -26,6 +26,7 @@ public abstract class PlaylistController implements PageController<PageKey> {
         if (playlists.isEmpty()) {
             System.out.println("  * 해당 플레이리스트가 없습니다.");
         } else {
+
             for (Playlist pl : playlists) {
                 System.out.println(pl.getId() + " : " + pl.getTitle() + " : " + pl.getIsCollaborative());
             }

@@ -49,11 +49,6 @@ public class PlaylistService {
         playlists = playlistDAO.findByUserId(userId);
     }
 
-    public void updateMySharedPlaylist(long userId) {
-        playlistName = "내가 소유한 공유 플레이리스트";
-        playlists = playlistDAO.findByUserIdAndIsShared(userId);
-    }
-
     // --- PlaylistSearchController를 위한 신규 메소드 ---
 
     /**
@@ -69,6 +64,11 @@ public class PlaylistService {
                 ownerKeyword, ownerExact,
                 lengthMin, lengthMax
         );
+    }
+
+    public void updateSharedPlaylists(long userId) {
+        this.playlistName = "공유 (소유하진 않았지만, 편집권한이 있는) 플레이리스트";
+        this.playlists = playlistDAO.findSharedPlaylistsByUserId(userId);
     }
 
     /**
