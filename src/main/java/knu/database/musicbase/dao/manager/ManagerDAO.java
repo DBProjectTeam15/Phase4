@@ -5,10 +5,9 @@ import knu.database.musicbase.data.Manager;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement; // PreparedStatement 임포트 추가
-import java.sql.ResultSet; // ResultSet 임포트 추가
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,75 +65,24 @@ public class ManagerDAO extends BasicDataAccessObjectImpl<Manager, String> {
     @Override
     public Optional<Manager> findById(String id) {
         String sql = "SELECT * FROM MANAGERS WHERE MANAGER_ID = ?";
-
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-            pstmt.setString(1, id);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(new Manager(
-                            rs.getString("MANAGER_ID"),
-                            rs.getString("PASSWORD"),
-                            rs.getString("NAME"))
-                    );
-                }
-            }
-            return Optional.empty();
-
-        } catch (SQLException ex) {
-            log.error("Error finding manager by id {}: {}", id, ex.getMessage(), ex);
-            return Optional.empty();
-        }
+        return executeQueryOne(sql, this::mapResultSetToManager, id);
     }
 
     @Override
     public List<Manager> findAll() {
         String sql = "SELECT * FROM MANAGERS";
-        List<Manager> managers = new ArrayList<>();
-
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            while (rs.next()) {
-                managers.add(new Manager(
-                        rs.getString("MANAGER_ID"),
-                        rs.getString("PASSWORD"),
-                        rs.getString("NAME")));
-            }
-            return managers;
-
-        } catch (SQLException ex) {
-            log.error("Error finding all managers: " + ex.getMessage(), ex);
-            return new ArrayList<>();
-        }
+        return executeQuery(sql, this::mapResultSetToManager);
     }
 
     public Optional<Manager> findByUsername(String username) {
         String sql = "SELECT * FROM MANAGERS WHERE MANAGER_ID = ?";
+        return executeQueryOne(sql, this::mapResultSetToManager, username);
+    }
 
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-            pstmt.setString(1, username);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    // 2. 컬럼명으로 접근
-                    return Optional.of(new Manager(
-                            rs.getString("MANAGER_ID"),
-                            rs.getString("PASSWORD"),
-                            rs.getString("NAME"))
-                    );
-                }
-            }
-            return Optional.empty();
-
-        } catch (SQLException ex) {
-            log.error("Error finding manager by username {}: {}", username, ex.getMessage(), ex);
-            return Optional.empty();
-        }
+    private Manager mapResultSetToManager(ResultSet rs) throws SQLException {
+        return new Manager(
+                rs.getString("MANAGER_ID"),
+                rs.getString("PASSWORD"),
+                rs.getString("NAME"));
     }
 }

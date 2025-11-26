@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +27,7 @@ public class ProviderDAO extends BasicDataAccessObjectImpl<Provider, Long> {
 
         try (Connection connection = getConnection();
 
-            PreparedStatement pstmt = connection.prepareStatement(sql, new String[] { "PROVIDER_ID" })) {
+                PreparedStatement pstmt = connection.prepareStatement(sql, new String[] { "PROVIDER_ID" })) {
 
             pstmt.setString(1, entity.getName());
             pstmt.setString(2, entity.getLink());
@@ -58,62 +57,18 @@ public class ProviderDAO extends BasicDataAccessObjectImpl<Provider, Long> {
     @Override
     public Optional<Provider> findById(Long id) {
         String sql = "SELECT * FROM PROVIDERS WHERE Provider_id = ?";
-
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-            pstmt.setLong(1, id);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(mapToProvider(rs));
-                }
-            }
-            return Optional.empty();
-
-        } catch (SQLException ex) {
-            log.error("Error finding provider by id {}: {}", id, ex.getMessage(), ex);
-            return Optional.empty(); // 오류 발생 시 null 대신 empty() 반환
-        }
+        return executeQueryOne(sql, this::mapToProvider, id);
     }
 
     @Override
     public List<Provider> findAll() {
         String sql = "SELECT * FROM PROVIDERS";
-        List<Provider> providers = new ArrayList<>();
-
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            while (rs.next()) {
-                providers.add(mapToProvider(rs));
-            }
-
-        } catch (SQLException ex) {
-            log.error("Error finding all providers: " + ex.getMessage(), ex);
-            // 오류 발생 시 null 대신 비어있는 리스트 반환
-        }
-        return providers;
+        return executeQuery(sql, this::mapToProvider);
     }
 
     public long deleteById(long id) {
         String sql = "DELETE FROM PROVIDERS WHERE PROVIDER_ID = ?";
-
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-
-            pstmt.setLong(1, id);
-
-
-            return pstmt.executeUpdate();
-
-        } catch (SQLException ex) {
-
-            log.error("Error deleting provider by id {}: {}", id, ex.getMessage(), ex);
-            return 0;
-        }
+        return executeUpdate(sql, id);
     }
 
     /**
@@ -123,7 +78,6 @@ public class ProviderDAO extends BasicDataAccessObjectImpl<Provider, Long> {
         return new Provider(
                 rs.getLong("Provider_id"),
                 rs.getString("Provider_name"),
-                rs.getString("Provider_link")
-        );
+                rs.getString("Provider_link"));
     }
 }

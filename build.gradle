@@ -23,8 +23,6 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    // dependency for Phase 4
-    implementation "org.apache.tomcat.embed:tomcat-embed-core:10.1.49"
 
     // utility libraries
     implementation "org.slf4j:slf4j-api:2.0.17"

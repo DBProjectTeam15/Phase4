@@ -26,11 +26,25 @@ public class ArtistDAO extends BasicDataAccessObjectImpl<Artist, Long> {
     @Override
     public Artist save(Artist entity) {
         String sql = "INSERT INTO ARTISTS (Name, Gender) VALUES (?, ?)";
+        // Note: executeUpdate doesn't support returning generated keys easily with the
+        // current simple implementation.
+        // For this specific method requiring generated keys, we might keep the raw JDBC
+        // or enhance the base class.
+        // Given the plan was to simplify, let's keep raw JDBC for 'save' if it needs
+        // keys,
+        // OR enhance executeUpdate to return keys.
+        // For now, to stick to the plan of "simplifying", I will leave 'save' as is if
+        // it's too complex to refactor
+        // without changing the base class signature significantly, BUT I can refactor
+        // the others.
+        // Actually, let's refactor 'save' to use a new helper if possible, but the base
+        // class helper I added
+        // doesn't support generated keys.
+        // Let's leave 'save' with raw JDBC for now as it's a special case, and refactor
+        // the rest.
 
         try (Connection connection = getConnection();
-
-             // Oracle은 이렇게 해야 가져올 수 생성된 키 값을 가져올 수 있음.
-             PreparedStatement pstmt = connection.prepareStatement(sql, new String[] { "Artist_id" })) {
+                PreparedStatement pstmt = connection.prepareStatement(sql, new String[] { "Artist_id" })) {
 
             pstmt.setString(1, entity.getName());
             pstmt.setString(2, entity.getGender());
@@ -41,11 +55,9 @@ public class ArtistDAO extends BasicDataAccessObjectImpl<Artist, Long> {
                 throw new SQLException("Creating artist failed, no rows affected.");
             }
 
-            // 생성된 키 (Artist_id)를 가져옴
             try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    long id = generatedKeys.getLong(1); // 생성된 Artist_id
-
+                    long id = generatedKeys.getLong(1);
                     return new Artist(id, entity.getName(), entity.getGender());
                 } else {
                     throw new SQLException("Creating artist failed, no ID obtained.");
@@ -61,73 +73,20 @@ public class ArtistDAO extends BasicDataAccessObjectImpl<Artist, Long> {
     @Override
     public Optional<Artist> findById(Long id) {
         String sql = "SELECT * FROM ARTISTS WHERE Artist_id = ?";
-
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-            pstmt.setLong(1, id);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(mapToArtist(rs));
-                }
-            }
-            return Optional.empty();
-
-        } catch (SQLException ex) {
-            log.error("Error finding artist by id {}: {}", id, ex.getMessage(), ex);
-            return Optional.empty();
-        }
+        return executeQueryOne(sql, this::mapToArtist, id);
     }
-
-
 
     @Override
     public List<Artist> findAll() {
         String sql = "SELECT * FROM ARTISTS";
-        List<Artist> artists = new ArrayList<>();
-
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            while (rs.next()) {
-                artists.add(mapToArtist(rs));
-            }
-
-        } catch (SQLException ex) {
-            log.error("Error finding all artists: " + ex.getMessage(), ex);
-        }
-        return artists;
+        return executeQuery(sql, this::mapToArtist);
     }
 
     public long deleteById(long id) {
         String sql = "DELETE FROM ARTISTS WHERE Artist_id = ?";
-
-        try (Connection connection = getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(sql)) {
-
-            pstmt.setLong(1, id);
-
-            // executeUpdate()는 영향을 받은 행의 수를 반환합니다.
-            // ID로 삭제하는 경우 0 (삭제 실패) 또는 1 (삭제 성공)이 됩니다.
-            return pstmt.executeUpdate();
-
-        } catch (SQLException ex) {
-            log.error("Error deleting artist by id {}: {}", id, ex.getMessage(), ex);
-            // 오류 발생 시 0을 반환
-            return 0;
-        }
+        return executeUpdate(sql, id);
     }
 
-    /**
-     * 집계 함수 사용 - 쿼리 3번 / 2번 유형 활용
-     * @param name
-     * @param nameExact
-     * @param gender
-     * @param roles
-     * @return
-     */
     public int countArtists(String name, boolean nameExact, String gender, List<String> roles) {
         List<Object> params = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT COUNT(DISTINCT a.Artist_id) AS total_count FROM ARTISTS a ");
@@ -156,48 +115,20 @@ public class ArtistDAO extends BasicDataAccessObjectImpl<Artist, Long> {
             sql.append(" WHERE ").append(String.join(" AND ", whereConditions));
         }
 
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-
-            for (int i = 0; i < params.size(); i++) {
-                pstmt.setObject(i + 1, params.get(i));
-            }
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return rs.getInt("total_count");
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+        return executeCount(sql.toString(), params.toArray());
     }
 
-    /**
-     * 유형 6번 쿼리를 응용 했습니다. (IN절)
-     *
-     * SELECT S.Title, S.Play_link
-     * FROM SONGS S
-     * JOIN PROVIDERS P ON S.Provider_id = P.Provider_id
-     * WHERE P.Provider_name IN ('Youtube_music', 'Sound_cloud');
-     */
     public List<Artist> searchArtists(String name, boolean nameExact, String gender, List<String> roles) {
-        List<Artist> artists = new ArrayList<>();
         List<Object> params = new ArrayList<>();
-
-        // DTO 매핑을 위해 'DisplayName' 대신 'a.Name'을 직접 SELECT
         StringBuilder sql = new StringBuilder(
-                "SELECT DISTINCT a.Artist_id, a.Name, a.Gender " +
-                        "FROM ARTISTS a "
-        );
+                "SELECT DISTINCT a.Artist_id, a.Name, a.Gender FROM ARTISTS a ");
 
         List<String> whereConditions = new ArrayList<>();
         if (roles != null && !roles.isEmpty()) {
             sql.append("LEFT JOIN ART_TYPES at ON a.Artist_id = at.Artist_id ");
             List<String> upperRoles = roles.stream().map(String::toUpperCase).collect(Collectors.toList());
             String placeholders = upperRoles.stream().map(r -> "?").collect(Collectors.joining(", "));
-            whereConditions.add("UPPER(at.Artist_type) IN (" + placeholders + ")"); // IN 활용된 부분
+            whereConditions.add("UPPER(at.Artist_type) IN (" + placeholders + ")");
             params.addAll(upperRoles);
         }
         if (name != null) {
@@ -216,34 +147,15 @@ public class ArtistDAO extends BasicDataAccessObjectImpl<Artist, Long> {
             sql.append(" WHERE ").append(String.join(" AND ", whereConditions));
         }
 
-        sql.append(" ORDER BY a.Name ASC"); // 정렬
+        sql.append(" ORDER BY a.Name ASC");
 
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
-
-            for (int i = 0; i < params.size(); i++) {
-                pstmt.setObject(i + 1, params.get(i));
-            }
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    artists.add(mapToArtist(rs));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return artists;
+        return executeQuery(sql.toString(), this::mapToArtist, params.toArray());
     }
 
-    /**
-     * ResultSet -> Artist 객체 매핑 헬퍼
-     */
     private Artist mapToArtist(ResultSet rs) throws SQLException {
         return new Artist(
                 rs.getLong("Artist_id"),
                 rs.getString("Name"),
-                rs.getString("Gender")
-        );
+                rs.getString("Gender"));
     }
 }

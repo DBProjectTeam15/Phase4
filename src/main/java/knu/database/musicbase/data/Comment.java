@@ -3,8 +3,6 @@ package knu.database.musicbase.data;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.sql.Timestamp;
-
 //CREATE TABLE COMMENTS (
 //		Comment_id NUMBER NOT NULL,
 //		Content VARCHAR2(200) NOT NULL,
@@ -19,7 +17,7 @@ public class Comment {
 
     private CommentKey id;
     private String content;
-    private Timestamp commentedAt;
+
 
 
 

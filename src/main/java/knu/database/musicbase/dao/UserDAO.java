@@ -1,12 +1,12 @@
 package knu.database.musicbase.dao;
 
 import knu.database.musicbase.data.User;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,11 +15,12 @@ import java.util.Optional;
  * 따라서 save 메서드는 생성된 ID를 포함한 새 User 객체를 반환합니다.
  */
 // CREATE TABLE USERS (
-//     User_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-//     Nickname VARCHAR2(30) NOT NULL,
-//     Password VARCHAR2(30) NOT NULL,
-//     Email VARCHAR2(50) NOT NULL
+// User_id NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+// Nickname VARCHAR2(30) NOT NULL,
+// Password VARCHAR2(30) NOT NULL,
+// Email VARCHAR2(50) NOT NULL
 // );
+@Slf4j
 public class UserDAO extends BasicDataAccessObjectImpl<User, Long> {
 
     /**
@@ -33,7 +34,7 @@ public class UserDAO extends BasicDataAccessObjectImpl<User, Long> {
 
         // Oracle에서 생성된 키(User_id)를 반환받기 위해 설정
         try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql, new String[]{"User_id"})) {
+                PreparedStatement pstmt = conn.prepareStatement(sql, new String[] { "User_id" })) {
 
             pstmt.setString(1, entity.getNickname());
             pstmt.setString(2, entity.getPassword());
@@ -55,8 +56,7 @@ public class UserDAO extends BasicDataAccessObjectImpl<User, Long> {
                             generatedId,
                             entity.getNickname(),
                             entity.getPassword(),
-                            entity.getEmail()
-                    );
+                            entity.getEmail());
                 } else {
                     throw new SQLException("Creating user failed, no ID obtained.");
                 }
@@ -71,21 +71,7 @@ public class UserDAO extends BasicDataAccessObjectImpl<User, Long> {
     @Override
     public Optional<User> findById(Long id) {
         String sql = "SELECT User_id, Nickname, Password, Email FROM USERS WHERE User_id = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setLong(1, id);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(mapResultSetToUser(rs));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
+        return executeQueryOne(sql, this::mapResultSetToUser, id);
     }
 
     /**
@@ -93,20 +79,8 @@ public class UserDAO extends BasicDataAccessObjectImpl<User, Long> {
      */
     @Override
     public List<User> findAll() {
-        List<User> users = new ArrayList<>();
         String sql = "SELECT * FROM USERS";
-
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-
-            while (rs.next()) {
-                users.add(mapResultSetToUser(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return users;
+        return executeQuery(sql, this::mapResultSetToUser);
     }
 
     /**
@@ -114,21 +88,7 @@ public class UserDAO extends BasicDataAccessObjectImpl<User, Long> {
      */
     public Optional<User> findByEmail(String email) {
         String sql = "SELECT * FROM USERS WHERE Email = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setString(1, email);
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    return Optional.of(mapResultSetToUser(rs));
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
+        return executeQueryOne(sql, this::mapResultSetToUser, email);
     }
 
     /**
@@ -138,23 +98,7 @@ public class UserDAO extends BasicDataAccessObjectImpl<User, Long> {
      */
     public int update(User entity) throws SQLException {
         String sql = "UPDATE USERS SET Nickname = ?, Password = ?, Email = ? WHERE User_id = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            // SET 절 파라미터
-            pstmt.setString(1, entity.getNickname());
-            pstmt.setString(2, entity.getPassword());
-            pstmt.setString(3, entity.getEmail());
-            // WHERE 절 파라미터
-            pstmt.setLong(4, entity.getUserId());
-
-            return pstmt.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace(); // 실제 환경에서는 로깅(Logging)을 권장합니다.
-            throw e; // 예외를 다시 던져서 상위에서 처리할 수 있도록 함
-        }
+        return executeUpdate(sql, entity.getNickname(), entity.getPassword(), entity.getEmail(), entity.getUserId());
     }
 
     /**
@@ -162,15 +106,7 @@ public class UserDAO extends BasicDataAccessObjectImpl<User, Long> {
      */
     public void deleteByID(long loggedInId) {
         String sql = "DELETE FROM USERS WHERE User_id = ?";
-
-        try (Connection conn = getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
-            pstmt.setLong(1, loggedInId);
-            pstmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        executeUpdate(sql, loggedInId);
     }
 
     /**
@@ -182,7 +118,6 @@ public class UserDAO extends BasicDataAccessObjectImpl<User, Long> {
                 rs.getLong("User_id"),
                 rs.getString("Nickname"),
                 rs.getString("Password"),
-                rs.getString("Email")
-        );
+                rs.getString("Email"));
     }
 }
