@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: MusicBase
+  profiles:
+    active: develop
+  sql:
+    init:
+      mode: never
+      continue-on-error: false

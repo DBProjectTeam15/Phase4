@@ -1,4 +1,7 @@
-database:
-  url: jdbc:oracle:thin:@localhost:1521:xe
-  username: musebase
-  password: musebase1234
+spring:
+
+  datasource:
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@localhost:1521:xe
+    username: musicbase
+    password: musicbase1234
