@@ -93,3 +93,7 @@ CREATE TABLE EDITS (
                        Playlist_id NUMBER NOT NULL REFERENCES PLAYLISTS(Playlist_id),
                        PRIMARY KEY (User_id, Playlist_id)
 );
+
+COMMIT;
+
+EXIT;
