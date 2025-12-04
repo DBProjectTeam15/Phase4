@@ -1,8 +1,0 @@
-<configuration>
-
-    <logger name="com.zaxxer.hikari" level="INFO" />
-
-    <root level="INFO">
-        <appender-ref ref="STDOUT" /> </root>
-
-</configuration>
