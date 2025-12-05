@@ -2,7 +2,7 @@ services:
   db:
     image: gvenzl/oracle-xe:21 # Or a specific version like 21-faststart, 18-slim, etc.
     ports:
-      - "1521:1521" # Map container port 1521 to host port 1521
+      - "1522:1521" # Map container port 1521 to host port 1521
     environment:
       - ORACLE_PASSWORD=oracle # Set a strong password for Oracle users (SYS, SYSTEM, PDBADMIN)
     volumes:

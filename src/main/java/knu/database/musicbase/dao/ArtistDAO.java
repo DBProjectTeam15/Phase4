@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
  * Gender VARCHAR2(10)
  * );
  */
+@Slf4j
 @Component
 public class ArtistDAO extends BasicDataAccessObjectImpl<Artist, Long> {
 
