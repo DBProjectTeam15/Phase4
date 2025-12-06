@@ -1,35 +1,39 @@
 package knu.database.musicbase.controller;
 
+import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.dto.CommentDto;
+import knu.database.musicbase.dto.UserDto;
+import knu.database.musicbase.repository.CommentRepository;
+import knu.database.musicbase.service.AuthService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @RequestMapping("/api/comments")
 @RestController
+@RequiredArgsConstructor
 public class CommentController {
 
-    @GetMapping
-    public ResponseEntity<List<CommentDto>> getMyComments() {
-        var commentDtos = new ArrayList<CommentDto>();
+    private final CommentRepository commentRepository;
+    private final AuthService authService;
 
-        for (int i=1; i<=5; ++i) {
-            commentDtos.add(CommentDto.builder()
-                    .userId(1L)
-                    .commentedAt(LocalDateTime.now())
-                    .playlistId(2L)
-                    .content("demo comment" + i)
-                    .build()
-            );
+    // 1. 내가 작성한 댓글 보기
+    // GET /api/comments
+    @GetMapping
+    public ResponseEntity<List<CommentDto>> getMyComments(HttpSession session) {
+        UserDto userDto = authService.getLoggedInUser(session);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.ok(commentDtos);
+        return ResponseEntity.ok(commentRepository.findCommentsByUserId(userDto.getId()));
+    }
+
+    @GetMapping("/playlists/{playlistId}")
+    public List<CommentDto> getPlaylistComments(@PathVariable long playlistId) {
+        return commentRepository.findCommentsByPlaylistId(playlistId);
     }
 }

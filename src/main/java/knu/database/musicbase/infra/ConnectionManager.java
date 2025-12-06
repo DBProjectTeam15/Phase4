@@ -20,6 +20,10 @@ public class ConnectionManager {
         instance = new ConnectionManager(config.getDatabaseUsername(), config.getDatabasePassword(), config.getDatabaseUrl());
     }
 
+    public static void init(String username, String password, String url) {
+        instance = new ConnectionManager(username, password, url);
+    }
+
     public static ConnectionManager getInstance() {
         if (instance == null) {
             throw new IllegalStateException(ConnectionManager.class.getSimpleName() + ".init 메서드를 먼저 호출하고 사용해주세요.");

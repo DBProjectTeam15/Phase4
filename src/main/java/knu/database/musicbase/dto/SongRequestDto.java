@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class SongRequestDto {
     private long id;
     private String title;
-    private long artist;
+    private String artist;
     private long requestUserId;
     private LocalDateTime requestAt;
 }

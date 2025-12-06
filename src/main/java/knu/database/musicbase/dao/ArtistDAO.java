@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * Gender VARCHAR2(10)
  * );
  */
-@Component
+@Slf4j
 public class ArtistDAO extends BasicDataAccessObjectImpl<Artist, Long> {
 
     @Override
