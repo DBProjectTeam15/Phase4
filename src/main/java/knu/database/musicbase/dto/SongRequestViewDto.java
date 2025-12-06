@@ -4,15 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class CommentDto {
-    private LocalDateTime commentedAt;
-    private Long userId;
-    private Long playlistId;
-    private String content;
+public class SongRequestViewDto {
+    private long id;
+    private String title;
+    private long artist;
+    private long requestUserId;
+    private LocalDateTime requestAt;
 }

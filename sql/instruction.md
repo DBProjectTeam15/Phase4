@@ -28,8 +28,8 @@ GRANT UNLIMITED TABLESPACE TO musicbase;
 docker cp ./sql/schema.sql <CONTAINER_NAME>:/tmp/schema.sql
 docker cp ./sql/data.sql <CONTAINER_NAME>:/tmp/data.sql
 
-docker exec -it <CONTAINER_NAME> sqlplus user1234/password1234 @/tmp/schema.sql
-docker exec -it <CONTAINER_NAME> sqlplus user1234/password1234 @/tmp/data.sql
+docker exec -it <CONTAINER_NAME> sqlplus musicbase/musicbase1234 @/tmp/schema.sql
+docker exec -it <CONTAINER_NAME> sqlplus musicbase/musicbase1234 @/tmp/data.sql
 ```
 
 MAKE SURE to write `COMMIT` statement.

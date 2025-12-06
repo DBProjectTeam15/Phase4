@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  * );
  */
 @Slf4j
-@Component
 public class ArtistDAO extends BasicDataAccessObjectImpl<Artist, Long> {
 
     @Override

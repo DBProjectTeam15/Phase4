@@ -2,12 +2,12 @@ services:
   db:
     image: gvenzl/oracle-xe:21 # Or a specific version like 21-faststart, 18-slim, etc.
     ports:
-      - "1522:1521" # Map container port 1521 to host port 1521
+      - "1521:1521" # Map container port 1521 to host port 1521
     environment:
       - ORACLE_PASSWORD=oracle # Set a strong password for Oracle users (SYS, SYSTEM, PDBADMIN)
     volumes:
-      - oracle-data:/opt/oracle/oradata # Persistent storage for database files (adjust path for older versions like 11gR2)
+      - oracle_data:/opt/oracle/oradata # Persistent storage for database files (adjust path for older versions like 11gR2)
     restart: unless-stopped # Automatically restart the container unless manually stopped
 
 volumes:
-  oracle-data:
+  oracle_data:
