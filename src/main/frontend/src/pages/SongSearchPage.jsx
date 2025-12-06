@@ -43,6 +43,16 @@ const SearchResultTable = ({ results, isLoading, error }) => {
         return <Alert variant="danger" className="mt-5">{error}</Alert>;
     }
 
+    const formatArtistNames = (artistName) => {
+        if (!artistName) return '';
+
+        const names = artistName.split(',').map(name => name.trim()).filter(name => name.length > 0);
+
+        const uniqueNames = [...new Set(names)];
+
+        return uniqueNames.join(', ');
+    };
+
     return (
         <div className="mt-5">
             <h4 style={{ fontWeight: 'bold' }}>검색 결과 ({results.length}건)</h4>
@@ -67,7 +77,7 @@ const SearchResultTable = ({ results, isLoading, error }) => {
                             <tr key={item.id}>
                                 <td className="p-0 py-2">{item.id}</td>
                                 <td className="p-0 py-2">{item.title}</td>
-                                <td className="p-0 py-2">{item.artistName}</td>
+                                <td className="p-0 py-2">{formatArtistNames(item.artistName)}</td>
                                 <td className="p-0 py-2">{Math.floor(item.length / 60)}:{String(item.length % 60).padStart(2, '0')}</td>
                                 <td className="p-0 py-2">{item.createAt}</td>
                                 <td className="p-0 py-2">{item.providerName}</td>
