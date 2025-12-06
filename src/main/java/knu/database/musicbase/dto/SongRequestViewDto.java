@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class SongRequestViewDto {
     private long id;
-    private String title;
-    private long artist;
-    private long requestUserId;
+    private String RequestSongTitle;
+    private String RequestSongArtist;
+    private long UserId;
     private LocalDateTime requestAt;
 }
