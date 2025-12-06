@@ -175,29 +175,42 @@ function SongSearchPage() {
             return;
         }
 
-        const filters = {
+        // Backend expects: title, exactTitle, artistName, exactArtist, minTime, maxTime,
+        // songName (provider name), exactsong, minDate, maxDate, sortBy, sortOrder
+        const params = new URLSearchParams();
 
-            ...(titleKeyword.trim() && { titleKeyword: titleKeyword.trim() }),
-            titleExact: titleExact,
-            ...(artistKeyword.trim() && { artistKeyword: artistKeyword.trim() }),
-            artistExact: artistExact,
-            ...(providerKeyword.trim() && { providerKeyword: providerKeyword.trim() }),
-            providerExact: providerExact,
+        if (titleKeyword.trim()) {
+            params.append('title', titleKeyword.trim());
+            params.append('exactTitle', titleExact);
+        }
+        if (artistKeyword.trim()) {
+            params.append('artistName', artistKeyword.trim());
+            params.append('exactArtist', artistExact);
+        }
+        if (providerKeyword.trim()) {
+            params.append('songName', providerKeyword.trim());
+            params.append('exactsong', providerExact);
+        }
+        if (totalDurationMin > 0) {
+            params.append('minTime', totalDurationMin);
+        }
+        if (totalDurationMax > 0) {
+            params.append('maxTime', totalDurationMax);
+        }
+        if (dateMin && dateMin !== 'INVALID') {
+            params.append('minDate', dateMin);
+        }
+        if (dateMax && dateMax !== 'INVALID') {
+            params.append('maxDate', dateMax);
+        }
 
-            ...(totalDurationMin > 0 && { lengthMin: totalDurationMin }),
-            ...(totalDurationMax > 0 && { lengthMax: totalDurationMax }),
-
-            ...(dateMin && dateMin !== 'INVALID' && { dateMin: dateMin }),
-            ...(dateMax && dateMax !== 'INVALID' && { dateMax: dateMax }),
-
-            orderBy: SORT_FIELDS_API[orderBy],
-            orderDir: SORT_ORDERS_API[orderDir],
-        };
+        params.append('sortBy', SORT_FIELDS_API[orderBy]);
+        params.append('sortOrder', SORT_ORDERS_API[orderDir]);
 
         try {
-            const response = await apiClient.post('/api/songs/search', filters);
+            const response = await apiClient.get(`/api/songs/search?${params.toString()}`);
 
-            setResults(response.data.data.songs || []);
+            setResults(response.data || []);
 
         } catch (err) {
             console.error("곡 검색 오류:", err.response || err);

@@ -69,8 +69,8 @@ public class PlaylistRepository {
     // 3. 특정 음악이 포함된 플리 조회
     public List<PlaylistDto> getPlaylistBySong(Long songId) {
         String sql = """
-            SELECT DISTINCT p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.USER_ID AS OWNER_ID FROM PLAYLIST p
-            JOIN PLAYLIST_SONG ps ON p.PLAYLIST_ID = ps.PLAYLIST_ID
+            SELECT DISTINCT p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.USER_ID AS OWNER_ID FROM PLAYLISTS p
+            JOIN CONSISTED_OF ps ON p.PLAYLIST_ID = ps.PLAYLIST_ID
             WHERE ps.SONG_ID = ?
         """;
         return jdbcTemplate.query(sql, playlistMapper, songId);
@@ -107,13 +107,14 @@ public class PlaylistRepository {
     }
 
     // 7. 플리 검색 (동적 쿼리)
-    public List<PlaylistDto> searchPlaylists(String title, Integer songCount, Integer commentCount,
+    public List<PlaylistDto> searchPlaylists(String title, Integer songCount, Integer songCountMax,
+                                             Integer commentCount, Integer commentCountMax,
                                              String ownerNickname, Integer totalLength,
                                              String sortBy, String sortOrder) {
-        StringBuilder sql = new StringBuilder("SELECT p.* FROM PLAYLIST p ");
+        StringBuilder sql = new StringBuilder("SELECT p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.USER_ID AS OWNER_ID FROM PLAYLISTS p ");
         // Owner 닉네임 검색이 필요할 경우 USERS 테이블 조인
         if (ownerNickname != null) {
-            sql.append("JOIN USERS u ON p.OWNER_ID = u.USER_ID ");
+            sql.append("JOIN USERS u ON p.USER_ID = u.USER_ID ");
         }
 
         sql.append("WHERE 1=1 ");
@@ -133,31 +134,42 @@ public class PlaylistRepository {
 
         // 최소 수록곡 수 (서브쿼리 활용)
         if (songCount != null) {
-            sql.append("AND (SELECT COUNT(*) FROM PLAYLIST_SONG ps WHERE ps.PLAYLIST_ID = p.PLAYLIST_ID) >= ? ");
+            sql.append("AND (SELECT COUNT(*) FROM CONSISTED_OF ps WHERE ps.PLAYLIST_ID = p.PLAYLIST_ID) >= ? ");
             params.add(songCount);
+        }
+
+        // 최대 수록곡 수
+        if (songCountMax != null) {
+            sql.append("AND (SELECT COUNT(*) FROM CONSISTED_OF ps WHERE ps.PLAYLIST_ID = p.PLAYLIST_ID) <= ? ");
+            params.add(songCountMax);
         }
 
         // 최소 댓글 수
         if (commentCount != null) {
-            sql.append("AND (SELECT COUNT(*) FROM PLAYLIST_COMMENT pc WHERE pc.PLAYLIST_ID = p.PLAYLIST_ID) >= ? ");
+            sql.append("AND (SELECT COUNT(*) FROM COMMENTS pc WHERE pc.PLAYLIST_ID = p.PLAYLIST_ID) >= ? ");
             params.add(commentCount);
         }
 
-        // 최소 총 재생 시간 (초) - SONG 테이블과 조인 필요
+        // 최대 댓글 수
+        if (commentCountMax != null) {
+            sql.append("AND (SELECT COUNT(*) FROM COMMENTS pc WHERE pc.PLAYLIST_ID = p.PLAYLIST_ID) <= ? ");
+            params.add(commentCountMax);
+        }
+
+        // 최소 총 재생 시간 (초) - SONGS 테이블과 조인 필요
         if (totalLength != null) {
             sql.append("""
-                AND (SELECT COALESCE(SUM(s.LENGTH), 0) 
-                     FROM PLAYLIST_SONG ps 
-                     JOIN SONG s ON ps.SONG_ID = s.SONG_ID 
-                     WHERE ps.PLAYLIST_ID = p.PLAYLIST_ID) >= ? 
+                AND (SELECT COALESCE(SUM(s.LENGTH), 0)
+                     FROM CONSISTED_OF ps
+                     JOIN SONGS s ON ps.SONG_ID = s.SONG_ID
+                     WHERE ps.PLAYLIST_ID = p.PLAYLIST_ID) >= ?
             """);
             params.add(totalLength);
         }
 
         // 정렬 (SQL Injection 방지를 위해 화이트리스트 검사 권장)
         String sortColumn = "p.TITLE"; // 기본값
-        if ("songCount".equals(sortBy)) sortColumn = "(SELECT COUNT(*) FROM PLAYLIST_SONG ps WHERE ps.PLAYLIST_ID = p.PLAYLIST_ID)";
-        else if ("date".equals(sortBy)) sortColumn = "p.CREATED_AT"; // 생성일 컬럼이 있다면
+        if ("songCount".equals(sortBy)) sortColumn = "(SELECT COUNT(*) FROM CONSISTED_OF ps WHERE ps.PLAYLIST_ID = p.PLAYLIST_ID)";
 
         String order = "DESC".equalsIgnoreCase(sortOrder) ? "DESC" : "ASC";
 

@@ -81,13 +81,15 @@ public class PlaylistController {
     @GetMapping("/search")
     public List<PlaylistDto> searchPlaylists(
             @RequestParam(required = false) String title,
-            @RequestParam(required = false) Integer songCount,      // 최소 수록곡 수
-            @RequestParam(required = false) Integer commentCount,   // 최소 댓글 수
-            @RequestParam(required = false) String owner,           // 소유자 닉네임
-            @RequestParam(required = false) Integer totalLength,    // 최소 총 재생 시간(초)
+            @RequestParam(required = false) Integer songCount,         // 최소 수록곡 수
+            @RequestParam(required = false) Integer songCountMax,      // 최대 수록곡 수
+            @RequestParam(required = false) Integer commentCount,      // 최소 댓글 수
+            @RequestParam(required = false) Integer commentCountMax,   // 최대 댓글 수
+            @RequestParam(required = false) String owner,              // 소유자 닉네임
+            @RequestParam(required = false) Integer totalLength,       // 최소 총 재생 시간(초)
             @RequestParam(required = false, defaultValue = "title") String sortBy, // 정렬 기준
             @RequestParam(required = false, defaultValue = "asc") String sortOrder // 정렬 순서
     ) {
-        return playlistRepository.searchPlaylists(title, songCount, commentCount, owner, totalLength, sortBy, sortOrder);
+        return playlistRepository.searchPlaylists(title, songCount, songCountMax, commentCount, commentCountMax, owner, totalLength, sortBy, sortOrder);
     }
 }

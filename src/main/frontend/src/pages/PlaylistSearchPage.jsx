@@ -27,12 +27,9 @@ const SearchResultTable = ({ results, isLoading, error }) => {
                     <Table borderless responsive hover style={{ cursor: 'pointer' }}>
                         <thead style={{ color: '#555' }}>
                         <tr>
-                            <th className="p-0 pb-2 border-bottom" style={{ width: '15%' }}>ID</th>
-                            <th className="p-0 pb-2 border-bottom" style={{ width: '35%' }}>플레이리스트명</th>
-                            <th className="p-0 pb-2 border-bottom" style={{ width: '15%' }}>소유자</th>
-                            <th className="p-0 pb-2 border-bottom" style={{ width: '10%' }}>곡 수</th>
-                            <th className="p-0 pb-2 border-bottom" style={{ width: '10%' }}>댓글 수</th>
-                            <th className="p-0 pb-2 border-bottom" style={{ width: '15%' }}>협업 여부</th>
+                            <th className="p-0 pb-2 border-bottom" style={{ width: '20%' }}>ID</th>
+                            <th className="p-0 pb-2 border-bottom" style={{ width: '55%' }}>플레이리스트명</th>
+                            <th className="p-0 pb-2 border-bottom" style={{ width: '25%' }}>협업 여부</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -40,10 +37,7 @@ const SearchResultTable = ({ results, isLoading, error }) => {
                             <tr key={item.id} onClick={() => navigate(`/playlists/${item.id}`)}>
                                 <td className="p-0 py-2">{item.id}</td>
                                 <td className="p-0 py-2">{item.title}</td>
-                                <td className="p-0 py-2">{item.ownerNickname || 'N/A'}</td>
-                                <td className="p-0 py-2">{item.songCount || 0}</td>
-                                <td className="p-0 py-2">{item.commentCount || 0}</td>
-                                <td className="p-0 py-2">{item.isCollaborative ? 'Y' : 'N'}</td>
+                                <td className="p-0 py-2">{item.isCollaborative === "True" ? 'Y' : 'N'}</td>
                             </tr>
                         ))}
                         </tbody>
@@ -120,28 +114,38 @@ function PlaylistSearchPage() {
             }
         }
 
-        const filters = {
+        // Backend expects: title, songCount, songCountMax, commentCount, commentCountMax, owner, totalLength, sortBy, sortOrder
+        const params = new URLSearchParams();
 
-            ...(titleKeyword.trim() && { titleKeyword: titleKeyword.trim() }),
-            titleExact: titleExact,
-
-            ...(ownerKeyword.trim() && { ownerKeyword: ownerKeyword.trim() }),
-            ownerExact: ownerExact,
-
-            ...(songCountMin && { songCountMin: minSongs }),
-            ...(songCountMax && { songCountMax: maxSongs }),
-
-            ...(commentCountMin && { commentCountMin: minComments }),
-            ...(commentCountMax && { commentCountMax: maxComments }),
-
-            ...(totalLengthMin > 0 && { lengthMin: totalLengthMin }),
-            ...(totalLengthMax > 0 && { lengthMax: totalLengthMax }),
-        };
+        if (titleKeyword.trim()) {
+            params.append('title', titleKeyword.trim());
+        }
+        if (ownerKeyword.trim()) {
+            params.append('owner', ownerKeyword.trim());
+        }
+        if (minSongs) {
+            params.append('songCount', minSongs);
+        }
+        if (maxSongs) {
+            params.append('songCountMax', maxSongs);
+        }
+        if (minComments) {
+            params.append('commentCount', minComments);
+        }
+        if (maxComments) {
+            params.append('commentCountMax', maxComments);
+        }
+        if (totalLengthMin > 0) {
+            params.append('totalLength', totalLengthMin);
+        }
+        // Default sorting
+        params.append('sortBy', 'title');
+        params.append('sortOrder', 'asc');
 
         try {
-            const response = await apiClient.post('/api/playlists/search', filters);
+            const response = await apiClient.get(`/api/playlists/search?${params.toString()}`);
 
-            setResults(response.data.data.playlists || []);
+            setResults(response.data || []);
 
         } catch (err) {
             console.error("플레이리스트 검색 오류:", err.response || err);

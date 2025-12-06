@@ -75,7 +75,7 @@ function ArtistSearchPage() {
         navigate(-1);
     };
 
-    // 1. 🔍 아티스트 검색 실행 (POST /api/artists/search)
+    // 1. 🔍 아티스트 검색 실행 (GET /api/artists/search)
     const handleSearch = async (e) => {
         e.preventDefault();
 
@@ -83,18 +83,30 @@ function ArtistSearchPage() {
         setError(null);
         setShowResults(true);
 
-        const filters = {
-            ...(nameKeyword.trim() && { nameKeyword: nameKeyword.trim() }),
-            nameExact: nameExact,
-            gender: mapGenderToApi(gender),
-            ...(role !== '전체' && { roles: [role] }),
-        };
+        // Backend expects: name, gender, role, sortBy, sortOrder
+        const params = new URLSearchParams();
+
+        if (nameKeyword.trim()) {
+            params.append('name', nameKeyword.trim());
+        }
+
+        const apiGender = mapGenderToApi(gender);
+        if (apiGender) {
+            params.append('gender', apiGender);
+        }
+
+        if (role !== '전체') {
+            params.append('role', role);
+        }
+
+        // Default sorting
+        params.append('sortBy', 'name');
+        params.append('sortOrder', 'asc');
 
         try {
-            // API 경로 수정: /artists/search -> /api/artists/search
-            const response = await apiClient.post('/api/artists/search', filters);
+            const response = await apiClient.get(`/api/artists/search?${params.toString()}`);
 
-            setResults(response.data.data.artists || []);
+            setResults(response.data || []);
 
         } catch (err) {
             console.error("아티스트 검색 오류:", err.response || err);
