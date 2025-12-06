@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Container, Button, Row, Col, Spinner } from 'react-bootstrap';
 import apiClient from '../api/apiClient.js';
 
-const PlaylistCard = ({ rank, id, title, ownerNickname, songCount, navigate }) => {
+const PlaylistCard = ({ rank, id, title, ownerId, songCount, navigate }) => {
     const handleDetailClick = () => {
         navigate(`/playlists/${id}`);
     };
@@ -36,11 +36,11 @@ const PlaylistCard = ({ rank, id, title, ownerNickname, songCount, navigate }) =
                 </div>
 
                 <div className="mb-3" style={{ fontSize: '0.9em', color: '#666' }}>
-                    소유자: {ownerNickname}
+                    소유자 ID : {ownerId}
                 </div>
 
                 <div className="d-flex justify-content-between align-items-center">
-                    <span style={{ color: '#9370DB', fontWeight: 'bold', fontSize: '0.9em' }}>{songCount}곡</span>
+                    {/*<span style={{ color: '#9370DB', fontWeight: 'bold', fontSize: '0.9em' }}>{songCount}곡</span>*/}
                     <Button
                         variant="link"
                         className="p-0"
@@ -68,7 +68,7 @@ function PlaylistPage() {
             // API 경로 수정: /playlists/top -> /api/playlists/top
             const response = await apiClient.get('/api/playlists/top10');
 
-            const fetchedPlaylists = response.data.data.playlists.map((playlist, index) => ({
+            const fetchedPlaylists = response.data.map((playlist, index) => ({
                 ...playlist,
                 rank: index + 1,
             }));

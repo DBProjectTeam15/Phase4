@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Card, Form, Button, Row, Col, Container, Spinner } from 'react-bootstrap';
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import apiClient, { USER_TOKEN_KEY, USER_NICKNAME_KEY } from '../api/apiClient.js';
@@ -32,6 +32,20 @@ function LoginPage() {
     const [passwordInput, setPasswordInput] = useState('');
     const [isLoggingIn, setIsLoggingIn] = useState(false);
 
+    useEffect(() => {
+        (async () => {
+            const myDataResponse = await apiClient.get('/api/my', );
+
+            if (myDataResponse.status != 200) {
+                throw Error('로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.');
+            }
+
+            setIsLoggedIn(true);
+        })();
+
+    }, []);
+
+
     const handleLogin = async (e) => {
         e.preventDefault();
 
@@ -48,23 +62,24 @@ function LoginPage() {
                 password: passwordInput,
             });
 
-            const userData = response.data.data;
+            const status = response.status;
 
-            const tokenValue = `user-session-${userData.userld}-${Date.now()}`;
+            if (status != 200) {
+                throw Error('로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.');
+            }
 
-            localStorage.setItem(USER_TOKEN_KEY, tokenValue);
-            localStorage.setItem(USER_NICKNAME_KEY, userData.nickname);
+            const myDataResponse = await apiClient.get('/api/my', );
 
-            setUsername(userData.nickname);
+            if (myDataResponse.status != 200) {
+                throw Error('로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.');
+            }
+
             setIsLoggedIn(true);
 
-            alert(response.data.message || `${userData.nickname}님, 환영합니다!`);
+            alert(`${myDataResponse.data.username}님, 환영합니다!`);
 
         } catch (error) {
-            console.error('사용자 로그인 오류:', error.response || error);
-            const msg = error.response?.data?.message || '로그인에 실패했습니다. 이메일 또는 비밀번호를 확인해주세요.';
-            alert(msg);
-        } finally {
+            alert(error.message);
             setIsLoggingIn(false);
             setPasswordInput('');
         }

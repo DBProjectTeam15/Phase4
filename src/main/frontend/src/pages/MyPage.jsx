@@ -7,11 +7,12 @@ const TAB_API_MAP = {
     '소유': '/api/playlists/my',
     '공유': '/api/playlists/shared',
     '편집 가능': '/api/playlists/editable',
-    '내 댓글': '/api/comments/my',
+    '내 댓글': '/api/comments',
 };
 const TAB_NAMES = Object.keys(TAB_API_MAP);
 
-const PlaylistTable = ({ content, navigate }) => {
+const PlaylistTable = ({ activeTab, content, navigate }) => {
+    console.log(content);
     if (content.isLoading) {
         return <div className="text-center py-5"><Spinner animation="border" size="sm" /> <p className="mt-2">목록 로딩 중...</p></div>;
     }
@@ -24,25 +25,26 @@ const PlaylistTable = ({ content, navigate }) => {
 
     let headers, dataDisplay;
 
-    if (content.tabName === '내 댓글') {
+    if (activeTab === '내 댓글') {
         headers = ['플레이리스트 제목', '댓글 내용', '작성 시각'];
         dataDisplay = content.data.map(d => ({
             id: d.commentedAt,
-            col1: d.playlistTitle || '플레이리스트 ID: ' + d.playlistId,
+            col1: '플레이리스트 ID: ' + d.playlistId,
             col2: d.content,
             col3: new Date(d.commentedAt).toLocaleDateString('ko-KR'),
             playlistId: d.playlistId,
         }));
     } else {
-        headers = ['제목', '협업', '곡 수', content.tabName === '소유' ? '소유자 ID' : '소유자 닉네임'];
-        dataDisplay = content.data.map(d => ({
-            id: d.id,
-            col1: d.title,
-            col2: d.isCollaborative ? 'Y' : 'N',
-            col3: d.songCount || '-',
-            col4: d.ownerNickname || d.userId,
-            playlistId: d.id,
-        }));
+        headers = ['제목', '협업', '소유자 ID'];
+        dataDisplay = content.data.map(d => {
+            return ({
+                id: d.id,
+                col1: d.title,
+                col2: d.isCollaborative === "True" ? 'Y' : 'N',
+                col3: d.ownerId,
+                playlistId: d.id,
+            })
+        });
     }
 
     return (
@@ -71,7 +73,6 @@ const PlaylistTable = ({ content, navigate }) => {
                         <td className="p-0 py-2" title={row.col1}>{row.col1}</td>
                         <td className="p-0 py-2">{row.col2}</td>
                         <td className="p-0 py-2">{row.col3}</td>
-                        <td className="p-0 py-2">{row.col4}</td>
                         <td className="p-0 py-2 text-end">
                             <span style={{ color: '#007bff', fontSize: '0.9em' }}>상세 보기 →</span>
                         </td>
@@ -88,7 +89,7 @@ function MyPage() {
     const navigate = useNavigate();
     const { setIsLoggedIn } = useOutletContext();
 
-    const [userProfile, setUserProfile] = useState({ nickname: '', email: '', id: null });
+    const [userProfile, setUserProfile] = useState({});
 
     const [currentPassword, setCurrentPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
@@ -120,12 +121,11 @@ function MyPage() {
     const fetchUserProfile = async () => {
         setIsProfileLoading(true);
         try {
-            const response = await apiClient.get('/api/user/profile');
-            const data = response.data.data;
+            const response = await apiClient.get('/api/my');
+            const data = response.data;
             setUserProfile({
-                id: data.userld,
-                nickname: data.nickname,
-                email: data.email,
+                id: data.id,
+                username: data.username
             });
         } catch (err) {
             console.error("프로필 로드 오류:", err.response || err);
@@ -148,7 +148,7 @@ function MyPage() {
             const response = await apiClient.get(endpoint);
 
             const listKey = tabName === '내 댓글' ? 'comments' : 'playlists';
-            const data = response.data.data[listKey] || [];
+            const data = response.data || [];
 
             setTabContentState(prev => ({
                 ...prev,
@@ -179,7 +179,7 @@ function MyPage() {
 
     const handleAccountDeletion = async () => {
         try {
-            const response = await apiClient.delete('/api/user/account', {
+            const response = await apiClient.delete('/api/accounts', {
                 data: { confirmation: 'y' }
             });
 
@@ -227,11 +227,11 @@ function MyPage() {
         const nickname = e.target.newNickname.value;
 
         try {
-            const response = await apiClient.put('/api/user/nickname', {
-                newNickname: nickname,
+            const response = await apiClient.patch('/api/my', {
+                username: nickname,
             });
 
-            const updatedNickname = response.data.data.nickname;
+            const updatedNickname = response.data.username;
 
             setUserProfile(prev => ({ ...prev, nickname: updatedNickname }));
 
@@ -271,71 +271,7 @@ function MyPage() {
 
                 <div className="mb-4">
                     <h5 className="mb-2" style={{ fontSize: '1em' }}>현재 닉네임</h5>
-                    <p className="mb-3" style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{userProfile.nickname || '닉네임 없음'}</p>
-                </div>
-
-                <div className="mb-4">
-                    <h5 className="mb-3" style={{ fontSize: '1em' }}>비밀번호 변경</h5>
-                    <Form onSubmit={handlePasswordChange}>
-                        <Row className="g-3">
-                            <Col md={6}>
-                                <Form.Label className="text-muted" style={{ fontSize: '0.8em' }}>현재 비밀번호</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="currentPassword"
-                                    placeholder="현재 비밀번호 입력"
-                                    style={{ backgroundColor: '#f0f0f0', border: 'none', padding: '12px' }}
-                                    required
-                                />
-                            </Col>
-                            <Col md={6}>
-                                <Form.Label className="text-muted" style={{ fontSize: '0.8em' }}>변경할 비밀번호</Form.Label>
-                                <Form.Control
-                                    type="password"
-                                    name="newPassword"
-                                    placeholder="새 비밀번호 입력"
-                                    style={{ backgroundColor: '#f0f0f0', border: 'none', padding: '12px' }}
-                                    required
-                                />
-                            </Col>
-                            <Col xs={12}>
-                                <Button variant="dark" type="submit" style={{ backgroundColor: 'black', color: 'white', padding: '8px 20px' }}>
-                                    비밀번호 변경
-                                </Button>
-                            </Col>
-                        </Row>
-                    </Form>
-                </div>
-
-                <div className="mb-4">
-                    <h5 className="mb-3" style={{ fontSize: '1em' }}>닉네임 변경</h5>
-                    <Form className="d-flex align-items-end" onSubmit={handleNicknameChange}>
-                        <div style={{ flexGrow: 1, maxWidth: '300px' }}>
-                            <Form.Label className="text-muted" style={{ fontSize: '0.8em' }}>새 닉네임</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="newNickname"
-                                placeholder="새 닉네임을 입력하세요"
-                                style={{ backgroundColor: '#f0f0f0', border: 'none', padding: '12px' }}
-                                required
-                            />
-                        </div>
-                        <Button variant="dark" type="submit" className="ms-3" style={{ backgroundColor: 'black', color: 'white', padding: '12px 20px', height: '48px' }}>
-                            닉네임 변경
-                        </Button>
-                    </Form>
-                </div>
-
-                <div>
-                    <h5 className="mb-2" style={{ fontSize: '1em' }}>계정 삭제</h5>
-                    <p className="text-muted mb-3" style={{ fontSize: '0.9em' }}>계정을 삭제하면 모든 데이터가 영구적으로 삭제됩니다.</p>
-                    <Button
-                        variant="danger"
-                        onClick={handleShowModal}
-                        style={{ backgroundColor: '#dc3545', color: 'white', padding: '8px 20px', border: 'none' }}
-                    >
-                        계정 삭제
-                    </Button>
+                    <p className="mb-3" style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{userProfile.username || '닉네임 없음'}</p>
                 </div>
             </Card>
 
@@ -363,9 +299,8 @@ function MyPage() {
                     ))}
                 </div>
 
-                <PlaylistTable content={tabContentState[activeTab]} navigate={navigate} />
+                <PlaylistTable activeTab={activeTab} content={tabContentState[activeTab]} navigate={navigate} />
             </Card>
-
             <Modal show={showModal} onHide={handleCloseModal} centered>
                 <Modal.Header closeButton>
                     <Modal.Title>계정 삭제</Modal.Title>

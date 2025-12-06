@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Container, Button, Table, Spinner, Alert } from 'react-bootstrap';
 import apiClient from '../api/apiClient.js';
 
-const INITIAL_DETAIL = { id: null, title: '로딩 중...', ownerNickname: '', songs: 0, isCollaborative: false };
+const INITIAL_DETAIL = { id: null, title: '로딩 중...', ownerNickname: '', songs: 0, isCollaborative: "False" };
 
 function PlaylistDetailPage() {
     const navigate = useNavigate();
@@ -19,11 +19,12 @@ function PlaylistDetailPage() {
         setError(null);
 
         const playlistId = parseInt(id, 10);
-        if (isNaN(playlistId)) {
-            setError("유효하지 않은 플레이리스트 ID입니다.");
-            setIsLoading(false);
-            return;
-        }
+
+        // if (isNaN(playlistId)) {
+        //     setError("유효하지 않은 플레이리스트 ID입니다.");
+        //     setIsLoading(false);
+        //     return;
+        // }
 
         try {
             const [detailResponse, songsResponse] = await Promise.all([
@@ -31,22 +32,33 @@ function PlaylistDetailPage() {
                 apiClient.get(`/api/playlists/${playlistId}/songs`),
             ]);
 
-            if (detailResponse.data.success) {
-                const detail = detailResponse.data.data;
+            if (detailResponse.data) {
+                const detail = detailResponse.data;
                 setPlaylistDetail({
                     ...detail,
-                    ownerNickname: detail.ownerNickname || `User ${detail.userld}`,
+                    ownerNickname: `User ${detail.ownerId}`,
                 });
             }
+            else {
+                setError("유효하지 않은 플레이리스트 ID입니다.");
+                setIsLoading(false);
+                return;
+            }
 
-            if (songsResponse.data.success) {
-                const fetchedSongs = songsResponse.data.data.songs;
+            if (songsResponse.data) {
+                const fetchedSongs = songsResponse.data;
                 setSongs(fetchedSongs);
                 setPlaylistDetail(prev => ({
                     ...prev,
-                    songs: songsResponse.data.data.totalSongs
+                    songs: songsResponse.data.length
                 }));
             }
+            else {
+                setError("유효하지 않은 플레이리스트 ID입니다.");
+                setIsLoading(false);
+                return;
+            }
+
         } catch (err) {
             console.error("플레이리스트 상세 로드 오류:", err.response || err);
             if (err.response && err.response.status === 404) {
@@ -101,8 +113,8 @@ function PlaylistDetailPage() {
             <div className="mb-5">
                 <h2 className="mb-1" style={{ fontWeight: 'bold' }}>{data.title}</h2>
                 <p className="text-muted" style={{ fontSize: '0.9em' }}>
-                    소유자: **{data.ownerNickname}** | 총 **{data.songs}**곡
-                    {data.isCollaborative ? ' | (협업 가능)' : ''}
+                    소유자: {data.ownerNickname}
+                    {data.isCollaborative == "True" ? ' | (협업 가능)' : ''}
                 </p>
             </div>
 
