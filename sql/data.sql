@@ -417,36 +417,106 @@ INSERT INTO PROVIDERS (Provider_name, Provider_link) VALUES ('Sound_cloud', 'htt
 
 COMMIT;
 
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('IRIS OUT', 'https://www.youtube.com/watch?v=Cb0JZhdmjtg', 154, TIMESTAMP '2025-09-24 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('Blue Valentine', 'https://www.youtube.com/watch?v=TLftyCObb_E', 195, TIMESTAMP '2025-10-13 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('JANE DOE', 'https://www.youtube.com/watch?v=zuO2fClon98', 247, TIMESTAMP '2025-09-24 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('Golden', 'https://www.youtube.com/watch?v=9_bTl2vvYQg', 202, TIMESTAMP '2025-06-20 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('Drowning', 'https://www.youtube.com/watch?v=tiKFuzpX-NA', 247, TIMESTAMP '2023-04-26 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('Soda Pop', 'https://www.youtube.com/watch?v=y7CrvsCIjyo', 171, TIMESTAMP '2025-06-20 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('Good Goodbye', 'https://www.youtube.com/watch?v=QxGt54-oh1A', 226, TIMESTAMP '2025-10-15 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('시작의 아이 ハジマリのコ (Starting With You)', 'https://www.youtube.com/watch?v=Njhy69sFriY', 266, TIMESTAMP '2025-01-01 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('뛰어(JUMP)', 'https://www.youtube.com/watch?v=r6Eei81SuqE', 194, TIMESTAMP '2025-07-11 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('타임캡슐', 'https://www.youtube.com/watch?v=aLUvL0mNQmY', 263, TIMESTAMP '2025-10-16 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song11', 'link11', 120, TIMESTAMP '2024-06-25 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song12', 'link12', 189, TIMESTAMP '2024-03-24 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song13', 'link13', 210, TIMESTAMP '2021-09-08 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song14', 'link14', 228, TIMESTAMP '2025-10-14 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song15', 'link15', 176, TIMESTAMP '2022-04-20 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song16', 'link16', 186, TIMESTAMP '2024-10-21 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song17', 'link17', 188, TIMESTAMP '2023-01-14 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song18', 'link18', 237, TIMESTAMP '2024-06-21 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song19', 'link19', 158, TIMESTAMP '2023-10-09 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song20', 'link20', 203, TIMESTAMP '2024-10-01 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song21', 'link21', 302, TIMESTAMP '2021-12-05 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song22', 'link22', 221, TIMESTAMP '2023-05-18 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song23', 'link23', 190, TIMESTAMP '2023-09-03 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song24', 'link24', 234, TIMESTAMP '2023-03-12 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song25', 'link25', 210, TIMESTAMP '2022-07-29 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song26', 'link26', 184, TIMESTAMP '2025-06-20 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song27', 'link27', 156, TIMESTAMP '2023-09-24 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song28', 'link28', 207, TIMESTAMP '2022-02-14 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song29', 'link29', 216, TIMESTAMP '2024-02-12 00:00:00', 1);
-INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song30', 'link30', 222, TIMESTAMP '2023-11-20 00:00:00', 1);
+-- ===== SONGS (1..20) =====
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Hype Boy', 176, 'https://www.youtube.com/watch?v=11cta61wi0g', TIMESTAMP '2022-08-01 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Dynamite', 199, 'https://www.youtube.com/watch?v=gdZLi9oWNZg', TIMESTAMP '2020-08-21 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Pink Venom', 190, 'https://www.youtube.com/watch?v=gQlMMD8auMs'2022-08-19 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Love Dive', 175, 'https://www.youtube.com/watch?v=Y8JFxS1HlDo', TIMESTAMP '2022-04-05 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Super', 191, 'https://www.youtube.com/watch?v=-GQg25oP0S4', TIMESTAMP '2023-04-24 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Spicy', 195, 'https://www.youtube.com/watch?v=Os_heh8vPfs', TIMESTAMP '2023-05-08 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('ANTIFRAGILE', 183, 'https://www.youtube.com/watch?v=pyf8cbqyfPs', TIMESTAMP '2022-10-17 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Set Me Free', 177, 'https://www.youtube.com/watch?v=w4cTYnOPdNk', TIMESTAMP '2023-03-10 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Celebrity', 217, 'https://www.youtube.com/watch?v=0-q1KafFCLU', TIMESTAMP '2021-01-27 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Ditto', 186, 'https://www.youtube.com/watch?v=Km71Rr9K-Bw', TIMESTAMP '2022-12-19 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Maniac', 203, 'https://www.youtube.com/watch?v=OvioeS1ZZ7o', TIMESTAMP '2022-03-18 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Candy', 213, 'https://www.youtube.com/watch?v=zuoSn3ObMz4', TIMESTAMP '2022-12-16 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Loco', 195, 'https://www.youtube.com/watch?v=MjCZfZfucEc', TIMESTAMP '2021-09-24 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Nxde', 178, 'https://www.youtube.com/watch?v=fCO7f0SmrDc', TIMESTAMP '2022-10-17 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Feel My Rhythm', 210, 'https://www.youtube.com/watch?v=R9At2ICm4LQ', TIMESTAMP '2022-03-21 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Bite Me', 170, 'https://www.youtube.com/watch?v=wXFLzODIdUI', TIMESTAMP '2023-05-22 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Teddy Bear', 185, 'https://www.youtube.com/watch?v=SxHmoifp0oQ', TIMESTAMP '2023-02-14 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('Love Lee', 184, 'https://www.youtube.com/watch?v=EIz09kLzN9k', TIMESTAMP '2023-08-21 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('INVU', 209, 'https://www.youtube.com/watch?v=AbZH7XWDW_k', TIMESTAMP '2022-02-14 00:00:00', 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
+('가시나', 201, 'https://www.youtube.com/watch?v=ur0hCdne2-s', TIMESTAMP '2017-08-22 00:00:00', 1);
+
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('좋은 날', 233, 'https://www.youtube.com/watch?v=jeqdYqsrsA0', TO_TIMESTAMP('2010-12-09', 'YYYY-MM-DD'), 1);
+
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('너랑 나', 250, 'https://www.youtube.com/watch?v=NJR8Inf77Ac', TO_TIMESTAMP('2011-11-29', 'YYYY-MM-DD'), 1);
+
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('금요일에 만나요', 208, 'https://www.youtube.com/watch?v=EiVmQZwJhsA', TO_TIMESTAMP('2013-12-20', 'YYYY-MM-DD'), 1);
+
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('팔레트', 217, 'https://www.youtube.com/watch?v=d9IxdwEFk1c', TO_TIMESTAMP('2017-04-21', 'YYYY-MM-DD'), 1);
+
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('밤편지', 253, 'https://www.youtube.com/watch?v=BzYnNdJhZQw', TO_TIMESTAMP('2017-03-24', 'YYYY-MM-DD'), 1);
+
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('에잇', 174, 'https://www.youtube.com/watch?v=TgOu00Mf3kI', TO_TIMESTAMP('2020-05-06', 'YYYY-MM-DD'), 1);
+
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('삐삐', 192, 'https://www.youtube.com/watch?v=nM0xDI5R50E', TO_TIMESTAMP('2018-10-10', 'YYYY-MM-DD'), 1);
+
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('라일락', 214, 'https://www.youtube.com/watch?v=v7bnOxV4jAc', TO_TIMESTAMP('2021-03-25', 'YYYY-MM-DD'), 1);
+
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('스물셋', 234, 'https://www.youtube.com/watch?v=42Gtm4-Ax2U', TO_TIMESTAMP('2015-10-23', 'YYYY-MM-DD'), 1);
+
+INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
+VALUES ('블루밍', 217, 'https://www.youtube.com/watch?v=D1PvIWdJ8xo', TO_TIMESTAMP('2019-11-18', 'YYYY-MM-DD'), 1);
+
 INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song31', 'link31', 229, TIMESTAMP '2024-07-26 00:00:00', 1);
 INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song32', 'link32', 202, TIMESTAMP '2025-07-26 00:00:00', 1);
 INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song33', 'link33', 243, TIMESTAMP '2021-12-16 00:00:00', 1);
@@ -520,54 +590,54 @@ INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('so
 
 COMMIT;
 
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Kenshi Yonezu', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Hikaru Utada', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('NMIXX', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('HUNTR/X', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('WOODZ', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Saja Boys', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('화사 (HWASA)', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('마크툽', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('NewJeans', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('250', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Gigi', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('BTS', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('David Stewart', 'M');
 INSERT INTO ARTISTS (Name, Gender) VALUES ('BLACKPINK', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('다비치', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('KASS', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('dnake', NULL);
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Dominsuk', 'M');
 INSERT INTO ARTISTS (Name, Gender) VALUES ('TEDDY', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('이무진', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist16', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist17', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist18', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist19', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist20', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist21', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist22', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist23', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist24', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist25', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist26', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist27', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist28', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist29', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist30', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist31', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist32', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist33', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist34', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist35', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist36', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist37', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist38', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist39', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist40', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist41', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist42', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist43', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist44', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist45', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist46', 'F');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist47', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist48', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('IVE', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('서지음', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Eden', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('SEVENTEEN', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Woozi', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('aespa', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('London Noise', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('LE SSERAFIM', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Score', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('TWICE', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Melanie Fontana', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Lindgren', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('IU', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Stray Kids', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('3RACHA', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('NCT DREAM', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('유영진', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('ITZY', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Dalla', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('(G)I-DLE', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Soyeon', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Red Velvet', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Jasper', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('ENHYPEN', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Wonderkid', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('STAYC', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Black Eyed Pilseung', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('AKMU', 'U');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('이찬혁', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('태연', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('JINBYJIN', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('선미', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('방혜현', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('김정배', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Adrian McKinnon', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('김이나', 'F');         -- 43
+INSERT INTO ARTISTS (Name, Gender) VALUES ('G-DRAGON', 'M');       -- 44
+INSERT INTO ARTISTS (Name, Gender) VALUES ('제휘', 'M');           -- 45
+INSERT INTO ARTISTS (Name, Gender) VALUES ('이종훈', 'M');         -- 46
+INSERT INTO ARTISTS (Name, Gender) VALUES ('손성득', 'M');         -- 47
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Ryan S. Jhun', 'M');   -- 48
 INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist49', 'F');
 INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist50', 'F');
 INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist51', 'F');
@@ -623,103 +693,161 @@ INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist100', 'M');
 
 COMMIT;
 
+-- song 1: Hype Boy (NewJeans, 250, Gigi)
 INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (1, 1, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (1, 1, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (1, 1, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (2, 3, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (2, 11, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (2, 12, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (3, 1, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (3, 1, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (3, 1, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (4, 4, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (4, 4, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (4, 4, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (5, 5, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (5, 5, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (5, 5, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (6, 6, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (6, 13, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (6, 13, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (7, 7, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (7, 7, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (7, 7, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (8, 8, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (8, 8, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (8, 8, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (9, 9, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (9, 14, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (9, 14, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (10, 10, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (10, 15, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (10, 15, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (3, 2, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (11, 36, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (11, 36, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (11, 29, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (12, 32, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (12, 32, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (12, 62, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (13, 22, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (13, 22, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (13, 22, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (14, 26, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (14, 26, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (14, 26, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (15, 17, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (15, 17, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (15, 17, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (16, 76, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (16, 90, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (16, 63, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (17, 17, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (17, 17, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (17, 17, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (18, 40, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (18, 40, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (18, 27, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (19, 39, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (19, 19, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (19, 25, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (1, 2, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (1, 3, 'Songwriter');
+
+-- song 2: Dynamite (BTS, David Stewart)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (2, 4, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (2, 5, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (2, 5, 'Songwriter');
+
+-- song 3: Pink Venom (BLACKPINK, TEDDY)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (3, 6, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (3, 7, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (3, 7, 'Songwriter');
+
+-- song 4: Love Dive (IVE, Eden, 서지음)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (4, 8, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (4, 10, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (4, 9, 'Songwriter');
+
+-- song 5: Super (SEVENTEEN, Woozi)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (5, 11, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (5, 12, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (5, 12, 'Songwriter');
+
+-- song 6: Spicy (aespa, London Noise, Bang Hye-hyun)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (6, 13, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (6, 14, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (6, 40, 'Songwriter');
+
+-- song 7: ANTIFRAGILE (LE SSERAFIM, Score)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (7, 15, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (7, 16, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (7, 16, 'Songwriter');
+
+-- song 8: Set Me Free (TWICE, Lindgren, Melanie Fontana)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (8, 17, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (8, 19, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (8, 18, 'Songwriter');
+
+-- song 9: Celebrity (IU)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (9, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (9, 20, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (9, 20, 'Songwriter');
+
+-- song 10: Ditto (NewJeans, 250, 민희진)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (10, 1, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (10, 2, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (10, 3, 'Songwriter');
+
+-- song 11: Maniac (Stray Kids, 3RACHA)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (11, 21, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (11, 22, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (11, 22, 'Songwriter');
+
+-- song 12: Candy (NCT DREAM, Yoo Young-jin)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (12, 23, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (12, 24, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (12, 24, 'Songwriter');
+
+-- song 13: Loco (ITZY, Dalla)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (13, 25, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (13, 26, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (13, 26, 'Songwriter');
+
+-- song 14: Nxde ((G)I-DLE, Soyeon)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (14, 27, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (14, 28, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (14, 28, 'Songwriter');
+
+-- song 15: Feel My Rhythm (Red Velvet, Jasper, 김정배)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (15, 29, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (15, 30, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (15, 41, 'Songwriter');
+
+-- song 16: Bite Me (ENHYPEN, Wonderkid)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (16, 31, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (16, 32, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (16, 32, 'Songwriter');
+
+-- song 17: Teddy Bear (STAYC, Black Eyed Pilseung)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (17, 33, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (17, 34, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (17, 34, 'Songwriter');
+
+-- song 18: Love Lee (AKMU, Lee Chan-hyuk)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (18, 35, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (18, 36, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (18, 36, 'Songwriter');
+
+-- song 19: INVU (Taeyeon, JINBYJIN, Adrian McKinnon)
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (19, 37, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (19, 38, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (19, 42, 'Songwriter');
+
+-- song 20: 가시나 (Sunmi, TEDDY)
 INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (20, 39, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (20, 39, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (20, 95, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (21, 79, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (21, 63, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (21, 63, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (22, 22, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (22, 22, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (22, 22, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (23, 26, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (23, 83, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (23, 26, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (23, 45, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (23, 26, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (24, 23, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (24, 45, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (24, 23, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (24, 45, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (24, 23, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (25, 25, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (25, 25, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (25, 25, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (26, 79, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (26, 18, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (26, 18, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (27, 16, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (27, 16, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (27, 16, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (28, 83, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (28, 66, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (28, 66, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (29, 40, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (29, 40, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (29, 55, 'Songwriter');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (30, 22, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (30, 76, 'Singer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (30, 22, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (30, 35, 'Composer');
-INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (30, 22, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (20, 7, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (20, 7, 'Songwriter');
+
+
+-- ===== SONG 21 : 좋은 날 =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (21, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (21, 43, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (21, 44, 'Composer');
+
+-- ===== SONG 22 : 너랑 나 =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (22, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (22, 20, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (22, 44, 'Composer');
+
+-- ===== SONG 23 : 분홍신 =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (23, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (23, 43, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (23, 44, 'Composer');
+
+-- ===== SONG 24 : 금요일에 만나요 =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (24, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (24, 20, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (24, 20, 'Composer');
+
+-- ===== SONG 25 : 스물셋 =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (25, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (25, 20, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (25, 45, 'Composer');
+
+-- ===== SONG 26 : Palette =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (26, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (26, 20, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (26, 20, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (26, 49, 'Composer');
+
+-- ===== SONG 27 : 밤편지 =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (27, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (27, 43, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (27, 46, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (27, 47, 'Composer');
+
+-- ===== SONG 28 : Blueming =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (28, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (28, 20, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (28, 45, 'Composer');
+
+-- ===== SONG 29 : Celebrity =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (29, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (29, 20, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (29, 48, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (29, 20, 'Composer');
+
+-- ===== SONG 30 : Love poem =====
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (30, 20, 'Singer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (30, 20, 'Songwriter');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (30, 20, 'Composer');
+INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (30, 47, 'Composer');
+
 INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (31, 20, 'Singer');
 INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (31, 20, 'Composer');
 INSERT INTO MADE_BY (Song_id, Artist_id, Role) VALUES (31, 20, 'Songwriter');
