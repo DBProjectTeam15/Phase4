@@ -4,7 +4,7 @@ package knu.database.musicbase.controller;
 import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.dto.ArtistDto;
 import knu.database.musicbase.enums.AuthType;
-import knu.database.musicbase.repository.ArtistRepository;
+import knu.database.musicbase.dao.ArtistDao;
 
 import knu.database.musicbase.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +27,7 @@ import java.util.List;
 public class ArtistController {
 
     @Autowired
-    private ArtistRepository artistRepository;
+    private ArtistDao artistDao;
     @Autowired
     private AuthService authService;
 
@@ -42,17 +42,17 @@ public class ArtistController {
             @RequestParam(required = false, defaultValue = "asc") String sortOrder
     ) {
         // Repository 호출
-        return artistRepository.searchArtists(name, gender, role, sortBy, sortOrder);
+        return artistDao.searchArtists(name, gender, role, sortBy, sortOrder);
     }
 
     @GetMapping
     public ResponseEntity<List<ArtistDto>> findAllArtists() {
-        return ResponseEntity.ok(artistRepository.findAll());
+        return ResponseEntity.ok(artistDao.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ArtistDto> getArtistDetails(@PathVariable long id) {
-        return ResponseEntity.ok(artistRepository.findById(id));
+        return ResponseEntity.ok(artistDao.findById(id));
     }
 
     // 아티스트 생성
@@ -60,7 +60,7 @@ public class ArtistController {
     public ResponseEntity<ArtistDto> addArtist(@RequestBody ArtistDto artistDto, HttpSession session) {
         var authType = authService.getAuthType(session);
         if (authType == AuthType.MANAGER) {
-            return ResponseEntity.ok(artistRepository.save(artistDto));
+            return ResponseEntity.ok(artistDao.save(artistDto));
         }
 
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -72,7 +72,7 @@ public class ArtistController {
     public ResponseEntity<ArtistDto> deleteArtist(@PathVariable Long id, HttpSession session) {
         var authType = authService.getAuthType(session);
         if (authType == AuthType.MANAGER) {
-            ArtistDto deletedArtist = artistRepository.delete(id);
+            ArtistDto deletedArtist = artistDao.delete(id);
             return ResponseEntity.ok(deletedArtist);
         }
 

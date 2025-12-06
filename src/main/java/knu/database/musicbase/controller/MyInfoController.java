@@ -1,7 +1,6 @@
 package knu.database.musicbase.controller;
 
 import jakarta.servlet.http.HttpSession;
-import knu.database.musicbase.dto.MyInfoDto;
 import knu.database.musicbase.dto.UserUpdateRequestDto;
 import knu.database.musicbase.dto.UserDto;
 import knu.database.musicbase.enums.AuthType;

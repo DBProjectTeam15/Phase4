@@ -5,8 +5,8 @@ import knu.database.musicbase.dto.ManagerLoginDto;
 import knu.database.musicbase.dto.UserDto;
 import knu.database.musicbase.dto.UserLoginDto;
 import knu.database.musicbase.enums.AuthType;
-import knu.database.musicbase.repository.AuthRepository;
-import knu.database.musicbase.repository.UserRepository;
+import knu.database.musicbase.dao.AuthDao;
+import knu.database.musicbase.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +16,8 @@ public class AuthService {
     private static final String AUTH_TYPE_ATTR = "authType";
     private static final String SESSION_ATTR = "session";
 
-    private final AuthRepository authRepository;
-    private final UserRepository userRepository;
+    private final AuthDao authDao;
+    private final UserDao userDao;
 
     public AuthType getAuthType(HttpSession session) {
         return (AuthType) session.getAttribute("authType");
@@ -34,8 +34,8 @@ public class AuthService {
 
     public UserDto login(UserLoginDto userLoginDto, HttpSession session) {
         try {
-            var userId = authRepository.findByUserId(userLoginDto);
-            var userDto = userRepository.findUserInfoById(userId);
+            var userId = authDao.findByUserId(userLoginDto);
+            var userDto = userDao.findUserInfoById(userId);
 
             session.setAttribute(AUTH_TYPE_ATTR, AuthType.USER);
             session.setAttribute(SESSION_ATTR, userDto);
@@ -49,8 +49,8 @@ public class AuthService {
 
     public UserDto loginManager(ManagerLoginDto managerLoginDto, HttpSession session) {
         try {
-            var id = authRepository.findByManagerId(managerLoginDto);
-            var userDto = userRepository.findUserInfoByIdFromManager(id);
+            var id = authDao.findByManagerId(managerLoginDto);
+            var userDto = userDao.findUserInfoByIdFromManager(id);
 
             session.setAttribute(AUTH_TYPE_ATTR, AuthType.MANAGER);
             session.setAttribute(SESSION_ATTR, userDto);

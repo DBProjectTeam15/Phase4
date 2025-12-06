@@ -3,7 +3,7 @@ package knu.database.musicbase.controller;
 import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.dto.ProviderDto;
 import knu.database.musicbase.enums.AuthType;
-import knu.database.musicbase.repository.ProviderRepository;
+import knu.database.musicbase.dao.ProviderDao;
 import knu.database.musicbase.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ProviderController {
 
     @Autowired
-    ProviderRepository providerRepository;
+    ProviderDao providerDao;
     @Autowired
     private AuthService authService;
 
@@ -29,24 +29,24 @@ public class ProviderController {
             @RequestParam(required = false, defaultValue = "name") String sortBy,
             @RequestParam(required = false, defaultValue = "asc") String sortOrder
     ) {
-        return providerRepository.searchProviders(name, link, sortBy, sortOrder);
+        return providerDao.searchProviders(name, link, sortBy, sortOrder);
     }
 
     @GetMapping
     public ResponseEntity<List<ProviderDto>> getAllProviders() {
-        return ResponseEntity.ok(providerRepository.findAll());
+        return ResponseEntity.ok(providerDao.findAll());
     }
 
     // 제공원 정보 조회
     @GetMapping("/{id}")
     public ProviderDto getProviderDetails(@PathVariable Long id) {
-        return providerRepository.getProviderDetails(id);
+        return providerDao.getProviderDetails(id);
     }
 
     // 제공원 추가
     @PostMapping("")
     public ProviderDto addProvider(@RequestBody ProviderDto providerDto) {
-        return providerRepository.addProvider(providerDto);
+        return providerDao.addProvider(providerDto);
     }
 
     // 제공원 삭제
@@ -55,7 +55,7 @@ public class ProviderController {
 
         var authType = authService.getAuthType(session);
         if (authType == AuthType.MANAGER) {
-            ProviderDto deletedProvider = providerRepository.deleteProvider(id);
+            ProviderDto deletedProvider = providerDao.deleteProvider(id);
             return ResponseEntity.ok(deletedProvider);
         }
 

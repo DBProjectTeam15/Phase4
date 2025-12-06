@@ -2,7 +2,7 @@ package knu.database.musicbase.controller;
 
 
 import knu.database.musicbase.dto.SongDetailDto;
-import knu.database.musicbase.repository.SongRepository;
+import knu.database.musicbase.dao.SongDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +14,7 @@ import java.util.List;
 public class SongController {
 
     @Autowired
-    SongRepository songRepository;
+    SongDao songDao;
 
     @GetMapping("/search")
     public List<SongDetailDto> searchSongs(
@@ -32,7 +32,7 @@ public class SongController {
             @RequestParam(required = false, defaultValue = "asc") String sortOrder
     ) {
         // 실제 DB 조회 로직 호출
-        return songRepository.searchSongs(
+        return songDao.searchSongs(
                 title, exactTitle,
                 artistName, exactArtist,
                 minTime, maxTime,
@@ -46,25 +46,25 @@ public class SongController {
     // 전체 음원 조회?
     @GetMapping("")
     public List<SongDetailDto> getAllSongs(){
-        return songRepository.getAllSongs();
+        return songDao.getAllSongs();
     }
 
     // 제공원 정보 조회
     @GetMapping("/{id}")
     public SongDetailDto getSongDetails(@PathVariable Long id) {
-        return songRepository.getSongDetails(id);
+        return songDao.getSongDetails(id);
     }
 
     // 제공원 추가
     @PostMapping("")
     public SongDetailDto addSong(@RequestBody SongDetailDto songDetailDto) {
-        return songRepository.addSong(songDetailDto);
+        return songDao.addSong(songDetailDto);
     }
 
     // 제공원 삭제
     @DeleteMapping("/{id}")
     public ResponseEntity<SongDetailDto> deleteSong(@PathVariable Long id) {
-        SongDetailDto deletedSong = songRepository.deleteSong(id);
+        SongDetailDto deletedSong = songDao.deleteSong(id);
 
         if (deletedSong != null) {
             // 성공 시: 200 OK

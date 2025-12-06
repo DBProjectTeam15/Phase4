@@ -4,12 +4,10 @@ import knu.database.musicbase.dto.ManagerLoginDto;
 import knu.database.musicbase.dto.UserDto;
 import knu.database.musicbase.dto.UserLoginDto;
 import knu.database.musicbase.enums.AuthType;
-import knu.database.musicbase.repository.AuthRepository;
 import jakarta.servlet.http.HttpSession; // Spring Boot 버전 확인 필요
 import knu.database.musicbase.service.AuthService;
 import knu.database.musicbase.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

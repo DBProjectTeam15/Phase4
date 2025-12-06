@@ -1,15 +1,15 @@
-package knu.database.musicbase.repository;
+package knu.database.musicbase.dao;
 
-import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.dto.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public class UserRepository {
+@Component
+public class UserDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

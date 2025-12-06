@@ -1,6 +1,5 @@
-package knu.database.musicbase.repository;
+package knu.database.musicbase.dao;
 
-import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.exception.EntityNotFoundException;
 import knu.database.musicbase.dto.PlaylistDto;
 import knu.database.musicbase.dto.SongDto;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class PlaylistRepository {
+public class PlaylistDao {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.dto.PlaylistDto;
 import knu.database.musicbase.dto.SongDto;
 import knu.database.musicbase.dto.UserDto;
-import knu.database.musicbase.repository.PlaylistRepository;
+import knu.database.musicbase.dao.PlaylistDao;
 import knu.database.musicbase.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,30 +18,30 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PlaylistController {
 
-    private final PlaylistRepository playlistRepository;
+    private final PlaylistDao playlistDao;
     private final AuthService authService;
 
 
     @GetMapping("/top10")
     public List<PlaylistDto> getTop10BySongCounts() {
-        return playlistRepository.getTop10BySongCounts();
+        return playlistDao.getTop10BySongCounts();
     }
 
     @GetMapping("/{id}")
     public PlaylistDto getPlaylist(@PathVariable Long id) {
-        return playlistRepository.getPlaylist(id);
+        return playlistDao.getPlaylist(id);
     }
 
     @GetMapping("/{id}/songs")
     public List<SongDto> getPlaylistDetails(@PathVariable Long id) {
-        return playlistRepository.getPlaylistDetails(id);
+        return playlistDao.getPlaylistDetails(id);
 
     }
 
     // 음악 포함 플리 조회 (sodId 오타 수정 -> songId)
     @GetMapping("/containing-song/{songId}")
     public List<PlaylistDto> getPlaylistBySong(@PathVariable Long songId) {
-        return playlistRepository.getPlaylistBySong(songId);
+        return playlistDao.getPlaylistBySong(songId);
     }
 
     // 내가 소유한 플리 조회 (세션은 Repository 내부에서 처리)
@@ -52,7 +52,7 @@ public class PlaylistController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.ok(playlistRepository.findPlaylistsByUserId(userDto.getId()));
+        return ResponseEntity.ok(playlistDao.findPlaylistsByUserId(userDto.getId()));
     }
 
     // 공유된 플리 조회
@@ -63,7 +63,7 @@ public class PlaylistController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.ok(playlistRepository.findSharedPlaylists(userDto.getId()));
+        return ResponseEntity.ok(playlistDao.findSharedPlaylists(userDto.getId()));
     }
 
     // 편집 가능한 플리 조회 (세션은 Repository 내부에서 처리)
@@ -74,7 +74,7 @@ public class PlaylistController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
-        return ResponseEntity.ok(playlistRepository.findEditablePlaylists(userDto.getId()));
+        return ResponseEntity.ok(playlistDao.findEditablePlaylists(userDto.getId()));
     }
 
     // 플리 검색
@@ -90,7 +90,7 @@ public class PlaylistController {
             @RequestParam(required = false, defaultValue = "title") String sortBy, // 정렬 기준
             @RequestParam(required = false, defaultValue = "asc") String sortOrder // 정렬 순서
     ) {
-        return playlistRepository.searchPlaylists(title, songCount, songCountMax, commentCount, commentCountMax, owner, totalLength, sortBy, sortOrder);
+        return playlistDao.searchPlaylists(title, songCount, songCountMax, commentCount, commentCountMax, owner, totalLength, sortBy, sortOrder);
     }
 
     // 플레이리스트에 곡 추가 (동시성 제어)
@@ -99,7 +99,7 @@ public class PlaylistController {
             @PathVariable Long playlistId,
             @PathVariable Long songId
     ) {
-        playlistRepository.addSongToPlaylist(playlistId, songId);
+        playlistDao.addSongToPlaylist(playlistId, songId);
         return ResponseEntity.ok("곡이 플레이리스트에 추가되었습니다.");
     }
 
@@ -109,7 +109,7 @@ public class PlaylistController {
             @PathVariable Long playlistId,
             @PathVariable Long songId
     ) {
-        playlistRepository.removeSongFromPlaylist(playlistId, songId);
+        playlistDao.removeSongFromPlaylist(playlistId, songId);
         return ResponseEntity.ok("곡이 플레이리스트에서 삭제되었습니다.");
     }
 }

@@ -2,8 +2,7 @@ package knu.database.musicbase.service;
 
 import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.dto.UserDto;
-import knu.database.musicbase.enums.AuthType;
-import knu.database.musicbase.repository.UserRepository;
+import knu.database.musicbase.dao.UserDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,20 +10,20 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserDao userDao;
     private final AuthService authService;
 
     public UserDto getUserById(long id) {
-        return userRepository.findUserInfoById(id);
+        return userDao.findUserInfoById(id);
     }
 
     public UserDto getManagerById(String id) {
-        return userRepository.findUserInfoByIdFromManager(id);
+        return userDao.findUserInfoByIdFromManager(id);
     }
 
     public boolean deleteUser(long userId) {
         try {
-            userRepository.deleteAccount(userId);
+            userDao.deleteAccount(userId);
             return true;
         }
         catch (IllegalArgumentException e) {
@@ -37,7 +36,7 @@ public class UserService {
         if (userDto == null) throw new IllegalStateException("User not logged in");
 
         try {
-            userRepository.updateMyInfo(userDto.getId(), username);
+            userDao.updateMyInfo(userDto.getId(), username);
         }
         catch (IllegalArgumentException e) {
             return null;

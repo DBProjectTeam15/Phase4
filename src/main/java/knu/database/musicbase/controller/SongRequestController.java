@@ -2,13 +2,11 @@ package knu.database.musicbase.controller;
 
 import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.dto.SongRequestDto;
-import knu.database.musicbase.dto.SongRequestViewDto;
 import knu.database.musicbase.dto.UserDto;
 import knu.database.musicbase.enums.AuthType;
-import knu.database.musicbase.repository.SongRequestRepository;
+import knu.database.musicbase.dao.SongRequestDao;
 import knu.database.musicbase.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +18,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SongRequestController {
 
-    private final SongRequestRepository songRequestRepository;
+    private final SongRequestDao songRequestDao;
     private final AuthService authService;
 
 //    // 1. 요청 검색
@@ -40,7 +38,7 @@ public class SongRequestController {
         if (authService.getAuthType(session) == AuthType.MANAGER) {
             UserDto userDto = authService.getLoggedInUser(session);
 
-            return ResponseEntity.ok(songRequestRepository.findByManagerId(userDto.getId()));
+            return ResponseEntity.ok(songRequestDao.findByManagerId(userDto.getId()));
         }
         else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -51,7 +49,7 @@ public class SongRequestController {
     // 삭제된 정보를 반환하기 위해 ResponseEntity<SongRequestViewDto> 사용
     @DeleteMapping("/{id}")
     public ResponseEntity<SongRequestDto> deleteSongRequests(@PathVariable long id) {
-        SongRequestDto deletedRequest = songRequestRepository.deleteSongRequest(id);
+        SongRequestDto deletedRequest = songRequestDao.deleteSongRequest(id);
 
         if (deletedRequest != null) {
             return ResponseEntity.ok(deletedRequest);
