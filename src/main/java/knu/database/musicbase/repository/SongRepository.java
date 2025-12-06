@@ -1,6 +1,6 @@
 package knu.database.musicbase.repository;
 
-import knu.database.musicbase.dto.SongDto;
+import knu.database.musicbase.dto.SongDetailDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class SongRepository {
                     "JOIN PROVIDERS p ON s.Provider_id = p.Provider_id ";
 
     // 1. 검색 기능 (기존 코드 유지 및 통합)
-    public List<SongDto> searchSongs(
+    public List<SongDetailDto> searchSongs(
             String title, boolean exactTitle,
             String artistName, boolean exactArtist,
             Integer minTime, Integer maxTime,
@@ -121,14 +120,14 @@ public class SongRepository {
     }
 
     // 2. 전체 음원 조회
-    public List<SongDto> getAllSongs() {
+    public List<SongDetailDto> getAllSongs() {
         // 조건 없이 기본 쿼리 + 정렬 수행
         String sql = BASE_SELECT_SQL + "ORDER BY s.Song_id DESC"; // 최신 등록순 등 기본 정렬
         return jdbcTemplate.query(sql, new SongRowMapper());
     }
 
     // 3. 특정 음원 상세 조회
-    public SongDto getSongDetails(Long id) {
+    public SongDetailDto getSongDetails(Long id) {
         String sql = BASE_SELECT_SQL + "WHERE s.Song_id = ?";
         try {
             return jdbcTemplate.queryForObject(sql, new SongRowMapper(), id);
@@ -138,16 +137,16 @@ public class SongRepository {
     }
 
     // 4. 음원 추가 (INSERT)
-    public SongDto addSong(SongDto songDto) {
+    public SongDetailDto addSong(SongDetailDto songDetailDto) {
         // 4-1. Provider Name으로 Provider ID 조회 (없으면 예외 발생 가능성 있음, 여기선 존재하는 것으로 가정)
         // 실제 로직에선 Provider가 없으면 생성하거나 에러를 뱉어야 합니다.
         String findProviderSql = "SELECT Provider_id FROM PROVIDERS WHERE Provider_name = ?";
         Long providerId;
         try {
-            providerId = jdbcTemplate.queryForObject(findProviderSql, Long.class, songDto.getProviderName());
+            providerId = jdbcTemplate.queryForObject(findProviderSql, Long.class, songDetailDto.getProviderName());
         } catch (EmptyResultDataAccessException e) {
             // 편의상 Provider가 없으면 null 처리하거나 임의의 값, 혹은 에러 처리
-            throw new RuntimeException("존재하지 않는 제공자입니다: " + songDto.getProviderName());
+            throw new RuntimeException("존재하지 않는 제공자입니다: " + songDetailDto.getProviderName());
         }
 
         // 4-2. SONGS 테이블 INSERT
@@ -157,9 +156,9 @@ public class SongRepository {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(insertSql, new String[]{"Song_id"});
-            ps.setString(1, songDto.getTitle());
-            ps.setString(2, songDto.getPlayLink());
-            ps.setInt(3, songDto.getLength());
+            ps.setString(1, songDetailDto.getTitle());
+            ps.setString(2, songDetailDto.getPlayLink());
+            ps.setInt(3, songDetailDto.getLength());
             // Create_at은 현재 시간(SYSTIMESTAMP)으로 입력
             ps.setLong(4, providerId);
             return ps;
@@ -175,9 +174,9 @@ public class SongRepository {
     }
 
     // 5. 음원 삭제 (DELETE)
-    public SongDto deleteSong(Long id) {
+    public SongDetailDto deleteSong(Long id) {
         // 삭제 전 정보 조회 (반환용)
-        SongDto songToDelete = getSongDetails(id);
+        SongDetailDto songToDelete = getSongDetails(id);
 
         if (songToDelete != null) {
             // 참조 무결성을 위해 연결 테이블(MADE_BY, PLAYLIST_SONG 등) 먼저 삭제 필요할 수 있음
@@ -192,16 +191,16 @@ public class SongRepository {
     }
 
     // Mapper 클래스
-    private static class SongRowMapper implements RowMapper<SongDto> {
+    private static class SongRowMapper implements RowMapper<SongDetailDto> {
         @Override
-        public SongDto mapRow(ResultSet rs, int rowNum) throws SQLException {
+        public SongDetailDto mapRow(ResultSet rs, int rowNum) throws SQLException {
             String createdAtStr = "";
             if (rs.getTimestamp("Create_at") != null) {
                 // ISO 8601 형식 변환 또는 단순 문자열 변환
                 createdAtStr = rs.getTimestamp("Create_at").toLocalDateTime().toString();
             }
 
-            return new SongDto(
+            return new SongDetailDto(
                     rs.getLong("Song_id"),
                     rs.getString("Title"),
                     rs.getString("Play_link"),

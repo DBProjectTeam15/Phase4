@@ -2,15 +2,16 @@ package knu.database.musicbase.repository;
 
 import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.dto.PlaylistDto;
+import knu.database.musicbase.dto.SongDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
+@Component
 public class PlaylistRepository {
 
     @Autowired
@@ -21,34 +22,54 @@ public class PlaylistRepository {
             PlaylistDto.builder()
                     .id(rs.getLong("PLAYLIST_ID"))
                     .title(rs.getString("TITLE"))
-                    .isCollaborative(rs.getString("IS_COLLABORATIVE")) // 'Y' or 'N' 가정
+                    .isCollaborative(rs.getString("IS_COLLABORATIVE"))
                     .ownerId(rs.getLong("OWNER_ID"))
+                    .build();
+
+    private final RowMapper<SongDto> songMapper = (rs, rowNum) ->
+            SongDto.builder()
+                    .id(rs.getLong("SONG_ID"))
+                    .title(rs.getString("SONG_TITLE"))
+                    .artistName(rs.getString("ARTIST_NAME"))
+                    .playLink(rs.getString("PLAY_LINK"))
                     .build();
 
     // 1. 음원 수가 많은 플리 10개 조회
     public List<PlaylistDto> getTop10BySongCounts() {
         String sql = """
-            SELECT p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.OWNER_ID
-            FROM PLAYLIST p
-            LEFT JOIN PLAYLIST_SONG ps ON p.PLAYLIST_ID = ps.PLAYLIST_ID
-            GROUP BY p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.OWNER_ID
+            SELECT p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.USER_ID AS OWNER_ID
+            FROM PLAYLISTS p
+                     LEFT JOIN CONSISTED_OF ps ON p.PLAYLIST_ID = ps.PLAYLIST_ID
+            GROUP BY p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.USER_ID
             ORDER BY COUNT(ps.SONG_ID) DESC
-            LIMIT 10
+                FETCH FIRST 10 ROWS ONLY
         """;
         return jdbcTemplate.query(sql, playlistMapper);
     }
 
-    // 2. 특정 플리 상세 조회
-    public PlaylistDto getPlaylistDetails(Long playlistId) {
-        String sql = "SELECT * FROM PLAYLIST WHERE PLAYLIST_ID = ?";
+    public PlaylistDto getPlaylist(Long playlistId) {
+        String sql = "SELECT p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.USER_ID AS OWNER_ID " +
+                "FROM PLAYLISTS p WHERE Playlist_id = ?";
         // 결과가 없으면 예외가 발생하므로 실제론 try-catch 처리가 좋습니다.
         return jdbcTemplate.queryForObject(sql, playlistMapper, playlistId);
+    }
+
+    public List<SongDto> getPlaylistDetails(Long playlistId) {
+        String sql = "SELECT S.SONG_ID, S.TITLE AS SONG_TITLE, S.PLAY_LINK, A.NAME AS ARTIST_NAME " +
+                "FROM CONSISTED_OF CO " +
+                "JOIN SONGS S ON CO.SONG_ID = S.SONG_ID " +
+                "LEFT JOIN MADE_BY MB ON S.SONG_ID = MB.SONG_ID AND MB.ROLE = 'Singer' " +
+                "LEFT JOIN ARTISTS A ON MB.ARTIST_ID = A.ARTIST_ID " +
+                "WHERE CO.PLAYLIST_ID = ?";
+
+        // 결과가 없으면 예외가 발생하므로 실제론 try-catch 처리가 좋습니다.
+        return jdbcTemplate.query(sql, songMapper, playlistId);
     }
 
     // 3. 특정 음악이 포함된 플리 조회
     public List<PlaylistDto> getPlaylistBySong(Long songId) {
         String sql = """
-            SELECT DISTINCT p.* FROM PLAYLIST p
+            SELECT DISTINCT p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.USER_ID AS OWNER_ID FROM PLAYLIST p
             JOIN PLAYLIST_SONG ps ON p.PLAYLIST_ID = ps.PLAYLIST_ID
             WHERE ps.SONG_ID = ?
         """;
@@ -56,31 +77,32 @@ public class PlaylistRepository {
     }
 
     // 4. 내가 소유한 플리 (세션 사용)
-    public List<PlaylistDto> getMyPlaylists(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) return List.of(); // 비로그인 시 빈 리스트 반환
-
-        String sql = "SELECT * FROM PLAYLIST WHERE OWNER_ID = ?";
+    public List<PlaylistDto> findPlaylistsByUserId(long userId) {
+        String sql = "SELECT p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.USER_ID AS OWNER_ID FROM PLAYLISTS p WHERE p.USER_ID = ?";
         return jdbcTemplate.query(sql, playlistMapper, userId);
     }
 
     // 5. 공유된 플리 (현재 미구현 - 빈 리스트 반환)
-    public List<PlaylistDto> getSharedPlaylists() {
-        return List.of();
+    public List<PlaylistDto> findSharedPlaylists(long userId) {
+        String sql = "SELECT P.PLAYLIST_ID, P.TITLE, P.IS_COLLABORATIVE, P.USER_ID AS OWNER_ID " +
+                "FROM PLAYLISTS P " +
+                "JOIN USERS U ON P.USER_ID = U.USER_ID " +
+                "JOIN EDITS E ON P.PLAYLIST_ID = E.PLAYLIST_ID " +
+                "WHERE E.USER_ID = ? AND P.USER_ID != ?";
+
+        return jdbcTemplate.query(sql, playlistMapper, userId, userId);
     }
 
     // 6. 편집 가능한 플리 (세션 사용)
     // 조건: 내가 Owner이거나, PLAYLIST_MEMBER 테이블에서 내 권한이 'EDIT'인 경우
-    public List<PlaylistDto> getEditablePlaylists(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) return List.of();
+    public List<PlaylistDto> findEditablePlaylists(long userId) {
+        String sql = "SELECT Playlist_id, Title, Is_collaborative, User_id AS OWNER_ID FROM PLAYLISTS WHERE User_id = ? " +
+                "UNION " +
+                "SELECT P.Playlist_id, P.Title, P.Is_collaborative, P.User_id AS OWNER_ID " +
+                "FROM PLAYLISTS P " +
+                "JOIN EDITS E ON P.Playlist_id = E.Playlist_id " +
+                "WHERE E.User_id = ?";
 
-        String sql = """
-            SELECT DISTINCT p.* FROM PLAYLIST p
-            LEFT JOIN PLAYLIST_MEMBER pm ON p.PLAYLIST_ID = pm.PLAYLIST_ID
-            WHERE p.OWNER_ID = ? 
-               OR (pm.USER_ID = ? AND pm.PERMISSION = 'EDIT')
-        """;
         return jdbcTemplate.query(sql, playlistMapper, userId, userId);
     }
 

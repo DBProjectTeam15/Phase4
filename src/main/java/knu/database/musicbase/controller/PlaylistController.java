@@ -2,29 +2,40 @@ package knu.database.musicbase.controller;
 
 import jakarta.servlet.http.HttpSession;
 import knu.database.musicbase.dto.PlaylistDto;
+import knu.database.musicbase.dto.SongDto;
+import knu.database.musicbase.dto.UserDto;
 import knu.database.musicbase.repository.PlaylistRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import knu.database.musicbase.service.AuthService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RequestMapping("/api/playlists")
 @RestController
+@RequiredArgsConstructor
 public class PlaylistController {
 
-    @Autowired // 의존성 주입 추가
-    private PlaylistRepository playlistRepository;
+    private final PlaylistRepository playlistRepository;
+    private final AuthService authService;
 
-    // 음원 수가 많은 플리 10개 조회
+
     @GetMapping("/top10")
     public List<PlaylistDto> getTop10BySongCounts() {
         return playlistRepository.getTop10BySongCounts();
     }
 
-    // 특정 플리 조회
     @GetMapping("/{id}")
-    public PlaylistDto getPlaylistDetails(@PathVariable Long id) {
+    public PlaylistDto getPlaylist(@PathVariable Long id) {
+        return playlistRepository.getPlaylist(id);
+    }
+
+    @GetMapping("/{id}/songs")
+    public List<SongDto> getPlaylistDetails(@PathVariable Long id) {
         return playlistRepository.getPlaylistDetails(id);
+
     }
 
     // 음악 포함 플리 조회 (sodId 오타 수정 -> songId)
@@ -35,20 +46,35 @@ public class PlaylistController {
 
     // 내가 소유한 플리 조회 (세션은 Repository 내부에서 처리)
     @GetMapping("/my")
-    public List<PlaylistDto> getMyPlaylists(HttpSession session) {
-        return playlistRepository.getMyPlaylists(session);
+    public ResponseEntity<List<PlaylistDto>> getMyPlaylists(HttpSession session) {
+        UserDto userDto = authService.getLoggedInUser(session);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok(playlistRepository.findPlaylistsByUserId(userDto.getId()));
     }
 
     // 공유된 플리 조회
     @GetMapping("/shared")
-    public List<PlaylistDto> getSharedPlaylists() {
-        return playlistRepository.getSharedPlaylists();
+    public ResponseEntity<List<PlaylistDto>> getSharedPlaylists(HttpSession session) {
+        UserDto userDto = authService.getLoggedInUser(session);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok(playlistRepository.findSharedPlaylists(userDto.getId()));
     }
 
     // 편집 가능한 플리 조회 (세션은 Repository 내부에서 처리)
     @GetMapping("/editable")
-    public List<PlaylistDto> getEditablePlaylists(HttpSession session) {
-        return playlistRepository.getEditablePlaylists(session);
+    public ResponseEntity<List<PlaylistDto>> getEditablePlaylists(HttpSession session) {
+        UserDto userDto = authService.getLoggedInUser(session);
+        if (userDto == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        return ResponseEntity.ok(playlistRepository.findEditablePlaylists(userDto.getId()));
     }
 
     // 플리 검색

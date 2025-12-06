@@ -7,13 +7,9 @@ import lombok.Data;
 @Data
 @Builder
 @AllArgsConstructor
-public class SongDto{
-    private Long id;
+public class SongDto {
+    private long id;
     private String title;
     private String playLink;
-    private Integer length;     // 초 단위
-    private String createAt;    // ISO 8601 String
-    private String providerName;
     private String artistName;
-
 }
