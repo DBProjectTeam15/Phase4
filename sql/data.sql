@@ -503,6 +503,7 @@ INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
 VALUES ('에잇', 174, 'https://www.youtube.com/watch?v=TgOu00Mf3kI', TIMESTAMP '2020-05-06 00:00:00', 1);
 
 
+
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
 VALUES ('삐삐', 192, 'https://www.youtube.com/watch?v=nM0xDI5R50E',  TIMESTAMP '2018-10-10 00:00:00', 1);
 
@@ -512,7 +513,7 @@ VALUES ('라일락', 214, 'https://www.youtube.com/watch?v=v7bnOxV4jAc', TIMESTA
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('스물셋', 234, 'https://www.youtube.com/watch?v=42Gtm4-Ax2U', TIMESTAMP '2015-10-23 00:00:00', 1;
+VALUES ('스물셋', 234, 'https://www.youtube.com/watch?v=42Gtm4-Ax2U', TIMESTAMP '2015-10-23 00:00:00', 1);
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
 VALUES ('블루밍', 217, 'https://www.youtube.com/watch?v=D1PvIWdJ8xo', TIMESTAMP '2019-11-18 00:00:00', 1);
@@ -632,13 +633,13 @@ INSERT INTO ARTISTS (Name, Gender) VALUES ('선미', 'F');
 INSERT INTO ARTISTS (Name, Gender) VALUES ('방혜현', 'F');
 INSERT INTO ARTISTS (Name, Gender) VALUES ('김정배', 'M');
 INSERT INTO ARTISTS (Name, Gender) VALUES ('Adrian McKinnon', 'M');
-INSERT INTO ARTISTS (Name, Gender) VALUES ('김이나', 'F');         -- 43
-INSERT INTO ARTISTS (Name, Gender) VALUES ('G-DRAGON', 'M');       -- 44
-INSERT INTO ARTISTS (Name, Gender) VALUES ('제휘', 'M');           -- 45
-INSERT INTO ARTISTS (Name, Gender) VALUES ('이종훈', 'M');         -- 46
-INSERT INTO ARTISTS (Name, Gender) VALUES ('손성득', 'M');         -- 47
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Ryan S. Jhun', 'M');   -- 48
-INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist49', 'F');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('김이나', 'F');         
+INSERT INTO ARTISTS (Name, Gender) VALUES ('이민수', 'M');
+INSERT INTO ARTISTS (Name, Gender) VALUES ('이종훈', 'M');    
+INSERT INTO ARTISTS (Name, Gender) VALUES ('제휘', 'M');          
+INSERT INTO ARTISTS (Name, Gender) VALUES ('김희원', 'M');         
+INSERT INTO ARTISTS (Name, Gender) VALUES ('Ryan S. Jhun', 'M');          
+INSERT INTO ARTISTS (Name, Gender) VALUES ('G-DRAGON', 'M'); 
 INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist50', 'F');
 INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist51', 'F');
 INSERT INTO ARTISTS (Name, Gender) VALUES ('Artist52', 'M');
@@ -6794,4 +6795,3 @@ INSERT INTO EDITS (User_id, Playlist_id) VALUES (62, 9);
 
 COMMIT;
 
-EXIT;
