@@ -425,7 +425,7 @@ INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
 ('Dynamite', 199, 'https://www.youtube.com/watch?v=gdZLi9oWNZg', TIMESTAMP '2020-08-21 00:00:00', 1);
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
-('Pink Venom', 190, 'https://www.youtube.com/watch?v=gQlMMD8auMs'2022-08-19 00:00:00', 1);
+('Pink Venom', 190, 'https://www.youtube.com/watch?v=gQlMMD8auMs', TIMESTAMP '2022-08-19 00:00:00', 1);
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
 ('Love Dive', 175, 'https://www.youtube.com/watch?v=Y8JFxS1HlDo', TIMESTAMP '2022-04-05 00:00:00', 1);
@@ -480,42 +480,42 @@ INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id) VALUES
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('좋은 날', 233, 'https://www.youtube.com/watch?v=jeqdYqsrsA0', TO_TIMESTAMP('2010-12-09', 'YYYY-MM-DD'), 1);
+VALUES ('좋은 날', 233, 'https://www.youtube.com/watch?v=jeqdYqsrsA0', TIMESTAMP '2010-12-09 00:00:00', 1);
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('너랑 나', 250, 'https://www.youtube.com/watch?v=NJR8Inf77Ac', TO_TIMESTAMP('2011-11-29', 'YYYY-MM-DD'), 1);
+VALUES ('너랑 나', 250, 'https://www.youtube.com/watch?v=NJR8Inf77Ac', TIMESTAMP '2011-11-29 00:00:00' , 1);
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('금요일에 만나요', 208, 'https://www.youtube.com/watch?v=EiVmQZwJhsA', TO_TIMESTAMP('2013-12-20', 'YYYY-MM-DD'), 1);
+VALUES ('금요일에 만나요', 208, 'https://www.youtube.com/watch?v=EiVmQZwJhsA', TIMESTAMP '2013-12-20 00:00:00', 1);
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('팔레트', 217, 'https://www.youtube.com/watch?v=d9IxdwEFk1c', TO_TIMESTAMP('2017-04-21', 'YYYY-MM-DD'), 1);
+VALUES ('팔레트', 217, 'https://www.youtube.com/watch?v=d9IxdwEFk1c', TIMESTAMP '2017-04-21 00:00:00', 1);
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('밤편지', 253, 'https://www.youtube.com/watch?v=BzYnNdJhZQw', TO_TIMESTAMP('2017-03-24', 'YYYY-MM-DD'), 1);
+VALUES ('밤편지', 253, 'https://www.youtube.com/watch?v=BzYnNdJhZQw', TIMESTAMP '2017-03-24 00:00:00', 1);
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('에잇', 174, 'https://www.youtube.com/watch?v=TgOu00Mf3kI', TO_TIMESTAMP('2020-05-06', 'YYYY-MM-DD'), 1);
+VALUES ('에잇', 174, 'https://www.youtube.com/watch?v=TgOu00Mf3kI', TIMESTAMP '2020-05-06 00:00:00', 1);
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('삐삐', 192, 'https://www.youtube.com/watch?v=nM0xDI5R50E', TO_TIMESTAMP('2018-10-10', 'YYYY-MM-DD'), 1);
+VALUES ('삐삐', 192, 'https://www.youtube.com/watch?v=nM0xDI5R50E',  TIMESTAMP '2018-10-10 00:00:00', 1);
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('라일락', 214, 'https://www.youtube.com/watch?v=v7bnOxV4jAc', TO_TIMESTAMP('2021-03-25', 'YYYY-MM-DD'), 1);
+VALUES ('라일락', 214, 'https://www.youtube.com/watch?v=v7bnOxV4jAc', TIMESTAMP '2021-03-25 00:00:00', 1);
 
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('스물셋', 234, 'https://www.youtube.com/watch?v=42Gtm4-Ax2U', TO_TIMESTAMP('2015-10-23', 'YYYY-MM-DD'), 1);
+VALUES ('스물셋', 234, 'https://www.youtube.com/watch?v=42Gtm4-Ax2U', TIMESTAMP '2015-10-23 00:00:00', 1;
 
 INSERT INTO SONGS (Title, Length, Play_link, Create_at, Provider_id)
-VALUES ('블루밍', 217, 'https://www.youtube.com/watch?v=D1PvIWdJ8xo', TO_TIMESTAMP('2019-11-18', 'YYYY-MM-DD'), 1);
+VALUES ('블루밍', 217, 'https://www.youtube.com/watch?v=D1PvIWdJ8xo', TIMESTAMP '2019-11-18 00:00:00', 1);
 
 INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song31', 'link31', 229, TIMESTAMP '2024-07-26 00:00:00', 1);
 INSERT INTO SONGS (Title, Play_link, Length, Create_at, Provider_id) VALUES ('song32', 'link32', 202, TIMESTAMP '2025-07-26 00:00:00', 1);
