@@ -1,12 +1,16 @@
 package knu.database.musicbase.repository;
 
 import jakarta.servlet.http.HttpSession;
+import knu.database.musicbase.exception.EntityNotFoundException;
 import knu.database.musicbase.dto.PlaylistDto;
 import knu.database.musicbase.dto.SongDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -176,5 +180,57 @@ public class PlaylistRepository {
         sql.append("ORDER BY ").append(sortColumn).append(" ").append(order);
 
         return jdbcTemplate.query(sql.toString(), playlistMapper, params.toArray());
+    }
+
+    // 8. SELECT FOR UPDATE로 플레이리스트 조회 (동시성 제어용)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public PlaylistDto getPlaylistForUpdate(Long playlistId) {
+        String sql = "SELECT p.PLAYLIST_ID, p.TITLE, p.IS_COLLABORATIVE, p.USER_ID AS OWNER_ID " +
+                     "FROM PLAYLISTS p WHERE p.PLAYLIST_ID = ? FOR UPDATE";
+        try {
+            return jdbcTemplate.queryForObject(sql, playlistMapper, playlistId);
+        } catch (Exception e) {
+            throw new EntityNotFoundException("플레이리스트를 찾을 수 없습니다. ID: " + playlistId);
+        }
+    }
+
+    // 9. 플레이리스트에 곡 추가 (트랜잭션 + 동시성 제어)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public void addSongToPlaylist(Long playlistId, Long songId) {
+        // 1. 플레이리스트 존재 확인 및 잠금
+        getPlaylistForUpdate(playlistId);
+
+        // 2. 곡 존재 확인
+        String checkSongSql = "SELECT COUNT(*) FROM SONGS WHERE SONG_ID = ?";
+        Integer songExists = jdbcTemplate.queryForObject(checkSongSql, Integer.class, songId);
+        if (songExists == null || songExists == 0) {
+            throw new EntityNotFoundException("곡을 찾을 수 없습니다. ID: " + songId);
+        }
+
+        // 3. 중복 체크
+        String checkDuplicateSql = "SELECT COUNT(*) FROM CONSISTED_OF WHERE PLAYLIST_ID = ? AND SONG_ID = ?";
+        Integer duplicateCount = jdbcTemplate.queryForObject(checkDuplicateSql, Integer.class, playlistId, songId);
+        if (duplicateCount != null && duplicateCount > 0) {
+            throw new DuplicateKeyException("이미 플레이리스트에 추가된 곡입니다.");
+        }
+
+        // 4. 곡 추가
+        String insertSql = "INSERT INTO CONSISTED_OF (PLAYLIST_ID, SONG_ID) VALUES (?, ?)";
+        jdbcTemplate.update(insertSql, playlistId, songId);
+    }
+
+    // 10. 플레이리스트에서 곡 삭제 (트랜잭션)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public void removeSongFromPlaylist(Long playlistId, Long songId) {
+        // 플레이리스트 존재 확인 및 잠금
+        getPlaylistForUpdate(playlistId);
+
+        // 곡 삭제
+        String deleteSql = "DELETE FROM CONSISTED_OF WHERE PLAYLIST_ID = ? AND SONG_ID = ?";
+        int rowsAffected = jdbcTemplate.update(deleteSql, playlistId, songId);
+
+        if (rowsAffected == 0) {
+            throw new EntityNotFoundException("플레이리스트에 해당 곡이 존재하지 않습니다.");
+        }
     }
 }

@@ -92,4 +92,24 @@ public class PlaylistController {
     ) {
         return playlistRepository.searchPlaylists(title, songCount, songCountMax, commentCount, commentCountMax, owner, totalLength, sortBy, sortOrder);
     }
+
+    // 플레이리스트에 곡 추가 (동시성 제어)
+    @PostMapping("/{playlistId}/songs/{songId}")
+    public ResponseEntity<String> addSongToPlaylist(
+            @PathVariable Long playlistId,
+            @PathVariable Long songId
+    ) {
+        playlistRepository.addSongToPlaylist(playlistId, songId);
+        return ResponseEntity.ok("곡이 플레이리스트에 추가되었습니다.");
+    }
+
+    // 플레이리스트에서 곡 삭제
+    @DeleteMapping("/{playlistId}/songs/{songId}")
+    public ResponseEntity<String> removeSongFromPlaylist(
+            @PathVariable Long playlistId,
+            @PathVariable Long songId
+    ) {
+        playlistRepository.removeSongFromPlaylist(playlistId, songId);
+        return ResponseEntity.ok("곡이 플레이리스트에서 삭제되었습니다.");
+    }
 }

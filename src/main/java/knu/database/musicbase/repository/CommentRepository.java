@@ -1,11 +1,15 @@
 package knu.database.musicbase.repository;
 
 import knu.database.musicbase.dto.CommentDto;
+import knu.database.musicbase.exception.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -38,5 +42,30 @@ public class CommentRepository {
                 "ORDER BY C.Commented_at DESC";
 
         return jdbcTemplate.query(sql, commentMapper, playlistId);
+    }
+
+    // 3. 댓글 추가 (트랜잭션)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
+    public CommentDto addComment(Long playlistId, Long userId, String content) {
+        // 1. 플레이리스트 존재 확인
+        String checkPlaylistSql = "SELECT COUNT(*) FROM PLAYLISTS WHERE PLAYLIST_ID = ?";
+        Integer playlistExists = jdbcTemplate.queryForObject(checkPlaylistSql, Integer.class, playlistId);
+        if (playlistExists == null || playlistExists == 0) {
+            throw new EntityNotFoundException("플레이리스트를 찾을 수 없습니다. ID: " + playlistId);
+        }
+
+        // 2. 댓글 삽입 (Commented_at은 SYSDATE로 자동 생성)
+        String insertSql = "INSERT INTO COMMENTS (USER_ID, PLAYLIST_ID, CONTENT, COMMENTED_AT) " +
+                          "VALUES (?, ?, ?, SYSDATE)";
+        jdbcTemplate.update(insertSql, userId, playlistId, content);
+
+        // 3. 방금 추가된 댓글 조회 (가장 최근 댓글)
+        String selectSql = "SELECT USER_ID, PLAYLIST_ID, CONTENT, COMMENTED_AT " +
+                          "FROM COMMENTS " +
+                          "WHERE USER_ID = ? AND PLAYLIST_ID = ? " +
+                          "ORDER BY COMMENTED_AT DESC " +
+                          "FETCH FIRST 1 ROWS ONLY";
+
+        return jdbcTemplate.queryForObject(selectSql, commentMapper, userId, playlistId);
     }
 }
