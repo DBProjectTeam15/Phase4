@@ -89,7 +89,7 @@ function ArtistManagePage() {
         try {
             const response = await apiClient.get(`/api/artists/${idToSearch}`);
             
-            const artistData = response.data.data;
+            const artistData = response.data;
             setCheckedArtistInfo({
                 id: artistData.id,
                 name: artistData.name,
